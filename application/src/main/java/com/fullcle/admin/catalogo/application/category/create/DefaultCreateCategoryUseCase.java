@@ -4,9 +4,13 @@ import com.fullcle.admin.catalogo.domain.category.Category;
 import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
 import com.fullcle.admin.catalogo.domain.validation.handler.ThrowsValidationHandler;
+import io.vavr.API;
 import io.vavr.control.Either;
 
 import java.util.Objects;
+
+import static io.vavr.API.Left;
+import static io.vavr.API.Try;
 
 public class DefaultCreateCategoryUseCase extends CreateCategoryUseCase {
 
@@ -21,10 +25,14 @@ public class DefaultCreateCategoryUseCase extends CreateCategoryUseCase {
         final var notification = Notification.create();
         final var aCategory = Category.newCategory(aCommand.name(), aCommand.description(), aCommand.isActive());
         aCategory.validate(notification);
-        if (notification.hasError()) {
-
-        }
-
-        return CreateCategoryOutput.from(this.categoryGetway.create(aCategory));
+        return notification.hasError() ? Left(notification) : create(aCategory);
     }
+
+    private Either<Notification, CreateCategoryOutput> create(final Category aCategory) {
+        return Try(() -> this.categoryGetway.create(aCategory))
+                .toEither()
+                .bimap(Notification::create, CreateCategoryOutput::from);
+    }
+
+
 }
