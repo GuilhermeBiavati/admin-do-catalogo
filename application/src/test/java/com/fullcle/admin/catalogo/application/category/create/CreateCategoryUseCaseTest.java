@@ -5,6 +5,7 @@ import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
@@ -29,6 +30,11 @@ public class CreateCategoryUseCaseTest {
 
     @Mock
     private CategoryGetway categoryGetway;
+
+    @BeforeEach
+    void cleanUp(){
+        Mockito.reset(categoryGetway);
+    }
 
 //    Teste do caminho feliz
 //    Teste passando uma propriedade inválida (name)

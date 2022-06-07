@@ -33,7 +33,7 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
 
         final var notification = Notification.create();
 
-        aCategory.update(aCommand.name(), aCommand.description(), aCommand.isActive());
+        aCategory.update(aCommand.name(), aCommand.description(), aCommand.isActive()).validate(notification);
 
         return notification.hasError() ? Left(notification) : update(aCategory);
     }
@@ -45,6 +45,8 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
     }
 
     private Supplier<DomainException> notFound(final CategoryID anId) {
-        return () -> DomainException.with(new Error("Category with ID %s was not found".formatted(CategoryID.from(anId.getValue()))));
+        return () -> DomainException.with(
+                new Error("Category with ID %s was not found".formatted(anId.getValue()))
+        );
     }
 }
