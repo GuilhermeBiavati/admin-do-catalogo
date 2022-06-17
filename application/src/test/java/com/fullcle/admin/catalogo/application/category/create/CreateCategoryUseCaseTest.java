@@ -1,7 +1,7 @@
 package com.fullcle.admin.catalogo.application.category.create;
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
 import org.junit.jupiter.api.Assertions;
@@ -29,11 +29,11 @@ public class CreateCategoryUseCaseTest {
     private DefaultCreateCategoryUseCase useCase;
 
     @Mock
-    private CategoryGetway categoryGetway;
+    private CategoryGeteway CategoryGeteway;
 
     @BeforeEach
     void cleanUp(){
-        Mockito.reset(categoryGetway);
+        Mockito.reset(CategoryGeteway);
     }
 
 //    Teste do caminho feliz
@@ -49,14 +49,14 @@ public class CreateCategoryUseCaseTest {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGetway.create(any())).thenAnswer(returnsFirstArg());
+        when(CategoryGeteway.create(any())).thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGetway, times(1))
+        Mockito.verify(CategoryGeteway, times(1))
                 .create(argThat(aCategory -> Objects.equals(expectedName, aCategory.getName())
                         && Objects.equals(expectedDescription, aCategory.getDescription())
                         && Objects.equals(expectedIsActive, aCategory.isActive())
@@ -83,7 +83,7 @@ public class CreateCategoryUseCaseTest {
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(categoryGetway, times(0)).create(any());
+        Mockito.verify(CategoryGeteway, times(0)).create(any());
 
     }
 
@@ -95,14 +95,14 @@ public class CreateCategoryUseCaseTest {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGetway.create(any())).thenAnswer(returnsFirstArg());
+        when(CategoryGeteway.create(any())).thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGetway, times(1))
+        Mockito.verify(CategoryGeteway, times(1))
                 .create(argThat(aCategory -> Objects.equals(expectedName, aCategory.getName())
                         && Objects.equals(expectedDescription, aCategory.getDescription())
                         && Objects.equals(expectedIsActive, aCategory.isActive())
@@ -124,14 +124,14 @@ public class CreateCategoryUseCaseTest {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGetway.create(any())).thenThrow(new IllegalStateException("Gateway error"));
+        when(CategoryGeteway.create(any())).thenThrow(new IllegalStateException("Gateway error"));
 
         final var notification = useCase.execute(aCommand).getLeft();
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(categoryGetway, times(1))
+        Mockito.verify(CategoryGeteway, times(1))
                 .create(argThat(aCategory -> Objects.equals(expectedName, aCategory.getName())
                         && Objects.equals(expectedDescription, aCategory.getDescription())
                         && Objects.equals(expectedIsActive, aCategory.isActive())

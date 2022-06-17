@@ -4,7 +4,7 @@ import com.fullcle.admin.catalogo.domain.pagination.Pagination;
 
 import java.util.Optional;
 
-public interface CategoryGetway {
+public interface CategoryGeteway {
     Category create(Category aCategory);
 
     void deleteById(CategoryID anId);

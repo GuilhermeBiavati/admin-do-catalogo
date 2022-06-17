@@ -1,7 +1,7 @@
 package com.fullcle.admin.catalogo.application.category.retrieve.list;
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.category.CategorySearchQuery;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
 import org.junit.jupiter.api.Assertions;
@@ -25,11 +25,11 @@ public class ListCategoriesUseCaseTest {
     private DefaultListCategoriesUseCase useCase;
 
     @Mock
-    private CategoryGetway categoryGetway;
+    private CategoryGeteway CategoryGeteway;
 
     @BeforeEach
     void cleanUp() {
-        Mockito.reset(categoryGetway);
+        Mockito.reset(CategoryGeteway);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ListCategoriesUseCaseTest {
         final var expectedItemsCount = 2;
         final var expectedResult = expectedPagination.map(CategoryListOutput::from);
 
-        Mockito.when(categoryGetway.findAll(eq(aQuery))).thenReturn(expectedPagination);
+        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenReturn(expectedPagination);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -82,7 +82,7 @@ public class ListCategoriesUseCaseTest {
         final var expectedItemsCount = 0;
         final var expectedResult = expectedPagination.map(CategoryListOutput::from);
 
-        Mockito.when(categoryGetway.findAll(eq(aQuery))).thenReturn(expectedPagination);
+        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenReturn(expectedPagination);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -109,7 +109,7 @@ public class ListCategoriesUseCaseTest {
 
         final var aQuery = new CategorySearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        Mockito.when(categoryGetway.findAll(eq(aQuery))).thenThrow(new IllegalStateException(expectedErrorMessage));
+        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenThrow(new IllegalStateException(expectedErrorMessage));
 
         final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(aQuery));
 

@@ -1,0 +1,22 @@
+package com.fullcle.admin.catalogo.domain.exceptions;
+
+import com.fullcle.admin.catalogo.domain.AggregateRoot;
+import com.fullcle.admin.catalogo.domain.Identifier;
+import com.fullcle.admin.catalogo.domain.validation.Error;
+
+import java.util.Collections;
+import java.util.List;
+
+public class NotFoundException extends DomainException {
+
+
+    protected NotFoundException(final String aMessage, final List<Error> anErrors) {
+        super(aMessage, anErrors);
+    }
+
+    public static NotFoundException with(final Class<? extends AggregateRoot<?>> anAggregate,
+                                         final Identifier identifier) {
+        final var anError = "%s with ID %s was not found".formatted(anAggregate.getSimpleName(), identifier.getValue());
+        return new NotFoundException(anError, Collections.emptyList());
+    }
+}

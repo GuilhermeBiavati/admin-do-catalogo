@@ -2,7 +2,7 @@ package com.fullcle.admin.catalogo.application.category.update;
 
 import com.fullcle.admin.catalogo.application.category.create.CreateCategoryCommand;
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
@@ -26,11 +26,11 @@ public class UpdateCategoryUseCaseTest {
     private DefaultUpdateCategoryUseCase useCase;
 
     @Mock
-    private CategoryGetway categoryGetway;
+    private CategoryGeteway categoryGeteway;
 
     @BeforeEach
     void cleanUp(){
-        Mockito.reset(categoryGetway);
+        Mockito.reset(categoryGeteway);
     }
 
     //    Teste do caminho feliz
@@ -56,17 +56,17 @@ public class UpdateCategoryUseCaseTest {
                 expectedDescription,
                 expectedIsActive);
 
-        Mockito.when(categoryGetway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
+        Mockito.when(categoryGeteway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
 
-        Mockito.when(categoryGetway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
+        Mockito.when(categoryGeteway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGetway, Mockito.times(1)).findById(eq(expectedId));
-        Mockito.verify(categoryGetway, Mockito.times(1)).update(ArgumentMatchers.argThat(
+        Mockito.verify(categoryGeteway, Mockito.times(1)).findById(eq(expectedId));
+        Mockito.verify(categoryGeteway, Mockito.times(1)).update(ArgumentMatchers.argThat(
                 aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
                         && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
                         && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
@@ -92,14 +92,14 @@ public class UpdateCategoryUseCaseTest {
 
         final var aCommand = UpdateCategoryCommand.with(expectedId.getValue(), expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGetway.findById(expectedId)).thenReturn(Optional.of(aCategory.clone()));
+        when(categoryGeteway.findById(expectedId)).thenReturn(Optional.of(aCategory.clone()));
 
         final var notification = useCase.execute(aCommand).getLeft();
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(categoryGetway, times(0)).update(any());
+        Mockito.verify(categoryGeteway, times(0)).update(any());
 
     }
 
@@ -118,9 +118,9 @@ public class UpdateCategoryUseCaseTest {
                 expectedDescription,
                 expectedIsActive);
 
-        Mockito.when(categoryGetway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
+        Mockito.when(categoryGeteway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
 
-        Mockito.when(categoryGetway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
+        Mockito.when(categoryGeteway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
         Assertions.assertTrue(aCategory.isActive());
         Assertions.assertNull(aCategory.getDeletedAt());
@@ -130,8 +130,8 @@ public class UpdateCategoryUseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGetway, Mockito.times(1)).findById(eq(expectedId));
-        Mockito.verify(categoryGetway, Mockito.times(1)).update(ArgumentMatchers.argThat(
+        Mockito.verify(categoryGeteway, Mockito.times(1)).findById(eq(expectedId));
+        Mockito.verify(categoryGeteway, Mockito.times(1)).update(ArgumentMatchers.argThat(
                 aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
                         && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
                         && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
@@ -160,16 +160,16 @@ public class UpdateCategoryUseCaseTest {
                 expectedDescription,
                 expectedIsActive);
 
-        Mockito.when(categoryGetway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
+        Mockito.when(categoryGeteway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
 
-        when(categoryGetway.update(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
+        when(categoryGeteway.update(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
 
         final var notification = useCase.execute(aCommand).getLeft();
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(categoryGetway, Mockito.times(1)).update(ArgumentMatchers.argThat(
+        Mockito.verify(categoryGeteway, Mockito.times(1)).update(ArgumentMatchers.argThat(
                 aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
                         && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
                         && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
@@ -197,15 +197,15 @@ public class UpdateCategoryUseCaseTest {
                 expectedDescription,
                 expectedIsActive);
 
-        Mockito.when(categoryGetway.findById(eq(CategoryID.from(expectedId)))).thenReturn(Optional.empty());
+        Mockito.when(categoryGeteway.findById(eq(CategoryID.from(expectedId)))).thenReturn(Optional.empty());
 
         final var actualException = Assertions.assertThrows(DomainException.class, () -> useCase.execute(aCommand));
 
-        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
 
-        Mockito.verify(categoryGetway, Mockito.times(1)).findById(eq(CategoryID.from(expectedId)));
-        Mockito.verify(categoryGetway, Mockito.times(0)).update(any());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+
+        Mockito.verify(categoryGeteway, Mockito.times(1)).findById(eq(CategoryID.from(expectedId)));
+        Mockito.verify(categoryGeteway, Mockito.times(0)).update(any());
     }
 
 }

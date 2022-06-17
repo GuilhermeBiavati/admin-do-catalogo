@@ -1,9 +1,10 @@
 package com.fullcle.admin.catalogo.application.category.retrieve.get;
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,11 +25,11 @@ public class GetCategoryByIdUseCaseTest {
     private DefaultGetCategoryByIdUseCase useCase;
 
     @Mock
-    private CategoryGetway categoryGetway;
+    private CategoryGeteway CategoryGeteway;
 
     @BeforeEach
     void cleanUp() {
-        Mockito.reset(categoryGetway);
+        Mockito.reset(CategoryGeteway);
     }
 
     @Test
@@ -41,7 +42,7 @@ public class GetCategoryByIdUseCaseTest {
 
         final var expectedId = aCategory.getId();
 
-        when(categoryGetway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
+        when(CategoryGeteway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
 
         final var actualCategory = useCase.execute(expectedId.getValue());
 
@@ -52,7 +53,6 @@ public class GetCategoryByIdUseCaseTest {
         Assertions.assertEquals(aCategory.getUpdatedAt(), actualCategory.updatedAt());
         Assertions.assertEquals(aCategory.getDeletedAt(), actualCategory.deletedAt());
         Assertions.assertEquals(expectedIsActive, actualCategory.isActive());
-//        Assertions.assertEquals(CategoryOutput.from(aCategory), actualCategory);
 
     }
 
@@ -61,10 +61,10 @@ public class GetCategoryByIdUseCaseTest {
         final var expectedErrorMessage = "Category with ID 123 was not found";
         final var expectedId = CategoryID.from("123");
 
-        when(categoryGetway.findById(eq(expectedId))).thenReturn(Optional.empty());
+        when(CategoryGeteway.findById(eq(expectedId))).thenReturn(Optional.empty());
 
         final var actualException = Assertions.assertThrows(
-                DomainException.class, () -> useCase.execute(expectedId.getValue())
+                NotFoundException.class, () -> useCase.execute(expectedId.getValue())
         );
 
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
@@ -75,7 +75,7 @@ public class GetCategoryByIdUseCaseTest {
         final var expectedErrorMessage = "Gateway error";
         final var expectedId = CategoryID.from("123");
 
-        when(categoryGetway.findById(eq(expectedId))).thenThrow(new IllegalStateException(expectedErrorMessage));
+        when(CategoryGeteway.findById(eq(expectedId))).thenThrow(new IllegalStateException(expectedErrorMessage));
 
         final var actualException = Assertions.assertThrows(
                 IllegalStateException.class, () -> useCase.execute(expectedId.getValue())

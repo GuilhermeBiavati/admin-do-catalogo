@@ -1,10 +1,8 @@
 package com.fullcle.admin.catalogo.application.category.create;
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
-import com.fullcle.admin.catalogo.domain.validation.handler.ThrowsValidationHandler;
-import io.vavr.API;
 import io.vavr.control.Either;
 
 import java.util.Objects;
@@ -14,10 +12,10 @@ import static io.vavr.API.Try;
 
 public class DefaultCreateCategoryUseCase extends CreateCategoryUseCase {
 
-    private final CategoryGetway categoryGetway;
+    private final CategoryGeteway CategoryGeteway;
 
-    public DefaultCreateCategoryUseCase(final CategoryGetway categoryGetway) {
-        this.categoryGetway = Objects.requireNonNull(categoryGetway);
+    public DefaultCreateCategoryUseCase(final CategoryGeteway CategoryGeteway) {
+        this.CategoryGeteway = Objects.requireNonNull(CategoryGeteway);
     }
 
     @Override
@@ -29,7 +27,7 @@ public class DefaultCreateCategoryUseCase extends CreateCategoryUseCase {
     }
 
     private Either<Notification, CreateCategoryOutput> create(final Category aCategory) {
-        return Try(() -> this.categoryGetway.create(aCategory))
+        return Try(() -> this.CategoryGeteway.create(aCategory))
                 .toEither()
                 .bimap(Notification::create, CreateCategoryOutput::from);
     }

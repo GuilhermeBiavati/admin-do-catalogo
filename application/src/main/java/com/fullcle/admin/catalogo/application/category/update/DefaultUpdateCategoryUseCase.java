@@ -2,9 +2,10 @@ package com.fullcle.admin.catalogo.application.category.update;
 
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGetway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcle.admin.catalogo.domain.validation.Error;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
 import io.vavr.API;
@@ -19,17 +20,17 @@ import static io.vavr.API.Try;
 
 public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
 
-    private CategoryGetway categoryGetway;
+    private CategoryGeteway CategoryGeteway;
 
-    public DefaultUpdateCategoryUseCase(CategoryGetway categoryGetway) {
-        this.categoryGetway = Objects.requireNonNull(categoryGetway);
+    public DefaultUpdateCategoryUseCase(CategoryGeteway CategoryGeteway) {
+        this.CategoryGeteway = Objects.requireNonNull(CategoryGeteway);
     }
 
     @Override
     public Either<Notification, UpdateCategoryOutput> execute(final UpdateCategoryCommand aCommand) {
         final var anId = CategoryID.from(aCommand.id());
 
-        final var aCategory = this.categoryGetway.findById(anId).orElseThrow(notFound(anId));
+        final var aCategory = this.CategoryGeteway.findById(anId).orElseThrow(notFound(anId));
 
         final var notification = Notification.create();
 
@@ -39,14 +40,12 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
     }
 
     private Either<Notification, UpdateCategoryOutput> update(final Category aCategory) {
-        return Try(() -> this.categoryGetway.update(aCategory))
+        return Try(() -> this.CategoryGeteway.update(aCategory))
                 .toEither()
                 .bimap(Notification::create, UpdateCategoryOutput::from);
     }
 
-    private Supplier<DomainException> notFound(final CategoryID anId) {
-        return () -> DomainException.with(
-                new Error("Category with ID %s was not found".formatted(anId.getValue()))
-        );
+    private Supplier<NotFoundException> notFound(final CategoryID anId) {
+        return () -> NotFoundException.with(Category.class, anId);
     }
 }

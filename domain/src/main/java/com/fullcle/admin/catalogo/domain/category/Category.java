@@ -5,6 +5,7 @@ import com.fullcle.admin.catalogo.domain.validation.ValidationHandler;
 import com.fullcle.admin.catalogo.domain.validation.handler.ThrowsValidationHandler;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Category extends AggregateRoot<CategoryID> implements Cloneable {
@@ -27,8 +28,8 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
         this.name = aName;
         this.description = aDescription;
         this.active = isActive;
-        this.createdAt = aCreationDate;
-        this.updatedAt = aUpdateDate;
+        this.createdAt = Objects.requireNonNull(aCreationDate, "'createdAt' should not be null");
+        this.updatedAt = Objects.requireNonNull(aUpdateDate, "'updatedAt' should not be null");
         this.deletedAt = aDeleteDate;
     }
 
@@ -39,8 +40,26 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
         return new Category(id, aName, aDescription, isActive, now, now, deletedAT);
     }
 
-    public static Category with(final Category aCategory) {
+    public static Category with(final CategoryID anId,
+                                final String name,
+                                final String description,
+                                final boolean active,
+                                final Instant createdAt,
+                                final Instant updatedAt,
+                                final Instant deletedAt) {
         return new Category(
+                anId,
+                name,
+                description,
+                active,
+                createdAt,
+                updatedAt,
+                deletedAt
+        );
+    }
+
+    public static Category with(final Category aCategory) {
+        return with(
                 aCategory.getId(),
                 aCategory.name,
                 aCategory.description,
@@ -50,6 +69,8 @@ public class Category extends AggregateRoot<CategoryID> implements Cloneable {
                 aCategory.deletedAt
         );
     }
+
+
 
     @Override
     public void validate(final ValidationHandler handler) {
