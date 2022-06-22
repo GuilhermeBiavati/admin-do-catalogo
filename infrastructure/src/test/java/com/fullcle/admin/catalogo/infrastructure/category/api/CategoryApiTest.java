@@ -13,7 +13,6 @@ import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryOutp
 import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryUseCase;
 import com.fullcle.admin.catalogo.domain.category.Category;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
-import com.fullcle.admin.catalogo.domain.category.CategorySearchQuery;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
@@ -22,8 +21,6 @@ import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
 import com.fullcle.admin.catalogo.infrastructure.api.CategoryApi;
 import com.fullcle.admin.catalogo.infrastructure.category.models.CreateCategoryRequest;
 import com.fullcle.admin.catalogo.infrastructure.category.models.UpdateCategoryRequest;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;

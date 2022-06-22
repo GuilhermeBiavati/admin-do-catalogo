@@ -9,7 +9,7 @@ import com.fullcle.admin.catalogo.application.category.retrieve.list.ListCategor
 import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryCommand;
 import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryOutput;
 import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryUseCase;
-import com.fullcle.admin.catalogo.domain.category.CategorySearchQuery;
+import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
 import com.fullcle.admin.catalogo.infrastructure.api.CategoryApi;
@@ -66,7 +66,7 @@ public class CategoryController implements CategoryApi {
 
     @Override
     public Pagination<CategoryListResponse> listCategories(String search, int page, int perPage, String sort, String direction) {
-        return this.listCategoriesUseCase.execute(new CategorySearchQuery(page, perPage, search, sort, direction)).map(CategoryApiPresenter::present);
+        return this.listCategoriesUseCase.execute(new SearchQuery(page, perPage, search, sort, direction)).map(CategoryApiPresenter::present);
     }
 
     @Override

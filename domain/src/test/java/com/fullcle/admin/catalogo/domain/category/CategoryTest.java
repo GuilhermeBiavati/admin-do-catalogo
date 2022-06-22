@@ -1,4 +1,4 @@
-package com.fullcle.admin.catalogo.domain;
+package com.fullcle.admin.catalogo.domain.category;
 
 import com.fullcle.admin.catalogo.domain.category.Category;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;

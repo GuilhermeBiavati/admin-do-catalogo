@@ -1,6 +1,7 @@
 package com.fullcle.admin.catalogo.infrastructure.category.models;
 
 import com.fullcle.admin.catalogo.JacksonTets;
+import com.fullcle.admin.catalogo.domain.utils.InstantUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ public class CategoryListResponseTest {
         final var expectName = "Filmes";
         final var expectDescription = "Filmes";
         final var expectedIsActive = true;
-        final var expectedCreatedAt = Instant.now();
-        final var expectedUpdatedAt = Instant.now();
-        final var expectedDeletedAt = Instant.now();
+        final var expectedCreatedAt = InstantUtils.now();
+        final var expectedUpdatedAt = InstantUtils.now();
+        final var expectedDeletedAt = InstantUtils.now();
 
         final var response = new CategoryListResponse(
                 expectId,

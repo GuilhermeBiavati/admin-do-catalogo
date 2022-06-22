@@ -1,6 +1,7 @@
-package com.fullcle.admin.catalogo.application.category.retrieve.get;
+package com.fullcle.admin.catalogo.application.genre.retrieve.get;
 
 import com.fullcle.admin.catalogo.application.UseCaseTest;
+import com.fullcle.admin.catalogo.application.category.retrieve.get.DefaultGetCategoryByIdUseCase;
 import com.fullcle.admin.catalogo.domain.category.Category;
 import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-public class GetCategoryByIdUseCaseTest extends UseCaseTest {
+public class GetGenreByIdUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultGetCategoryByIdUseCase useCase;

@@ -8,8 +8,8 @@ public record CreateCategoryCommand(
     public static CreateCategoryCommand with(
             final String aName,
             final String aDescription,
-            final boolean isActive
-            ) {
-        return new CreateCategoryCommand(aName, aDescription, isActive);
+            final Boolean isActive
+    ) {
+        return new CreateCategoryCommand(aName, aDescription, isActive != null ? isActive : false);
     }
 }

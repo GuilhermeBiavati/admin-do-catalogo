@@ -1,4 +1,4 @@
-package com.fullcle.admin.catalogo.application.category.update;
+package com.fullcle.admin.catalogo.application.genre.update;
 
 public record UpdateCategoryCommand(
         String id,

@@ -3,7 +3,7 @@ package com.fullcle.admin.catalogo.infrastructure.category.persistence;
 import com.fullcle.admin.catalogo.domain.category.Category;
 import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
-import com.fullcle.admin.catalogo.domain.category.CategorySearchQuery;
+import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcle.admin.catalogo.infrastructure.utils.SpecificationUtils;
 import org.springframework.data.domain.PageRequest;
@@ -11,10 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.fullcle.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
@@ -52,7 +50,7 @@ public class CategoryMySQLGateway implements CategoryGeteway {
     }
 
     @Override
-    public Pagination<Category> findAll(final CategorySearchQuery aQuery) {
+    public Pagination<Category> findAll(final SearchQuery aQuery) {
 //        paginação
 //        Busca dinamica pelo criterio terms
         final var page = PageRequest.of(
@@ -76,6 +74,11 @@ public class CategoryMySQLGateway implements CategoryGeteway {
                 pageResult.map(CategoryJpaEntity::toAggregate)
                         .toList()
         );
+    }
+
+    @Override
+    public List<CategoryID> existsByIds(Iterable<CategoryID> ids) {
+        return Collections.emptyList();
     }
 
     private Category save(final Category aCategory) {

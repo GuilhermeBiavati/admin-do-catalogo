@@ -1,5 +1,7 @@
-package com.fullcle.admin.catalogo.application.category.retrieve.list;
+package com.fullcle.admin.catalogo.application.genre.retrieve.list;
 
+import com.fullcle.admin.catalogo.application.category.retrieve.list.CategoryListOutput;
+import com.fullcle.admin.catalogo.application.category.retrieve.list.DefaultListCategoriesUseCase;
 import com.fullcle.admin.catalogo.domain.category.Category;
 import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
 import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
@@ -18,7 +20,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.eq;
 
 @ExtendWith(MockitoExtension.class)
-public class ListCategoriesUseCaseTest {
+public class ListGenreUseCaseTest {
 
     @InjectMocks
     private DefaultListCategoriesUseCase useCase;
