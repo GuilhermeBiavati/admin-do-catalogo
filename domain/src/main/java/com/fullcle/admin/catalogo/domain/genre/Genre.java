@@ -173,6 +173,17 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
         return this;
     }
 
+    public Genre addCategories(final List<CategoryID> categories) {
+        if (categories == null || categories.isEmpty()) {
+            return this;
+        }
+
+        this.categories.addAll(categories);
+        this.updatedAt = InstantUtils.now();
+
+        return this;
+    }
+
 
     private void selfValidate() {
         final var notification = Notification.create();
