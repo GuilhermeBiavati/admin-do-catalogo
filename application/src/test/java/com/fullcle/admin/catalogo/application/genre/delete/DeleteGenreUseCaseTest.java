@@ -1,69 +1,81 @@
 package com.fullcle.admin.catalogo.application.genre.delete;
 
-import com.fullcle.admin.catalogo.application.category.delete.DefaultDeleteCategoryUseCase;
-import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
-import com.fullcle.admin.catalogo.domain.category.CategoryID;
+
+import com.fullcle.admin.catalogo.application.UseCaseTest;
+import com.fullcle.admin.catalogo.domain.genre.Genre;
+import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
+import com.fullcle.admin.catalogo.domain.genre.GenreID;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.eq;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class DeleteGenreUseCaseTest {
+public class DeleteGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
-    private DefaultDeleteCategoryUseCase useCase;
+    private DefaultDeleteGenreUseCase useCase;
 
     @Mock
-    private CategoryGeteway categoryGeteway;
+    private GenreGateway genreGateway;
 
-    @BeforeEach
-    void cleanUp() {
-        reset(categoryGeteway);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(genreGateway);
     }
 
     @Test
-    public void givenAValidId_whenCallsDeleteCategory_shouldBeOK() {
-        final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", true);
-        final var expectedId = aCategory.getId();
+    public void givenAValidGenreId_whenCallsDeleteGenre_shouldDeleteGenre() {
+        // given
+        final var aGenre = Genre.newGenre("Ação", true);
 
-        doNothing().when(categoryGeteway).deleteById(eq(expectedId));
+        final var expectedId = aGenre.getId();
 
+        doNothing()
+                .when(genreGateway).deleteById(any());
+
+        // when
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
-        Mockito.verify(categoryGeteway, times(1)).deleteById(eq(expectedId));
-
+        // when
+        Mockito.verify(genreGateway, times(1)).deleteById(expectedId);
     }
 
     @Test
-    public void givenAInvalidId_whenCallsDeleteCategory_shouldBeOK() {
-        final var expectedId = CategoryID.from("123");
+    public void givenAnInvalidGenreId_whenCallsDeleteGenre_shouldBeOk() {
+        // given
+        final var expectedId = GenreID.from("123");
 
-        doNothing().when(categoryGeteway).deleteById(eq(expectedId));
+        doNothing()
+                .when(genreGateway).deleteById(any());
 
+        // when
         Assertions.assertDoesNotThrow(() -> useCase.execute(expectedId.getValue()));
 
-        Mockito.verify(categoryGeteway, times(1)).deleteById(eq(expectedId));
+        // when
+        Mockito.verify(genreGateway, times(1)).deleteById(expectedId);
     }
 
     @Test
-    public void givenAValidId_whenGetewayThrowsException_shouldReturnException() {
-        final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", true);
-        final var expectedId = aCategory.getId();
+    public void givenAValidGenreId_whenCallsDeleteGenreAndGatewayThrowsUnexpectedError_shouldReceiveException() {
+        // given
+        final var aGenre = Genre.newGenre("Ação", true);
+        final var expectedId = aGenre.getId();
 
-        doThrow(new IllegalStateException("Gateway error")).when(categoryGeteway).deleteById(eq(expectedId));
+        doThrow(new IllegalStateException("Gateway error"))
+                .when(genreGateway).deleteById(any());
 
-        Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.getValue()));
+        // when
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            useCase.execute(expectedId.getValue());
+        });
 
-        Mockito.verify(categoryGeteway, times(1)).deleteById(eq(expectedId));
+        // when
+        Mockito.verify(genreGateway, times(1)).deleteById(expectedId);
     }
-
 }

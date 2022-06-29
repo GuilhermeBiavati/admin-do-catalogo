@@ -2,7 +2,7 @@ package com.fullcle.admin.catalogo.application.category.update;
 
 import com.fullcle.admin.catalogo.IntegrationTest;
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
@@ -31,7 +31,7 @@ public class UpdateCategoryUseCaseTestIT {
     @Autowired
     private CategoryRepository categoryRepository;
     @SpyBean
-    private CategoryGeteway categoryGeteway;
+    private CategoryGateway categoryGateway;
 
     @Test
     public void givenAValidCommand_whenCallsUpdateCategory_shouldReturnCategoryId() {
@@ -86,14 +86,14 @@ public class UpdateCategoryUseCaseTestIT {
 
         final var aCommand = UpdateCategoryCommand.with(expectedId.getValue(), expectedName, expectedDescription, expectedIsActive);
 
-        when(categoryGeteway.findById(expectedId)).thenReturn(Optional.of(aCategory.clone()));
+        when(categoryGateway.findById(expectedId)).thenReturn(Optional.of(aCategory.clone()));
 
         final var notification = useCase.execute(aCommand).getLeft();
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(categoryGeteway, times(0)).update(any());
+        Mockito.verify(categoryGateway, times(0)).update(any());
 
     }
 
@@ -152,7 +152,7 @@ public class UpdateCategoryUseCaseTestIT {
                 expectedDescription,
                 expectedIsActive);
 
-        doThrow(new IllegalStateException(expectedErrorMessage)).when(categoryGeteway).update(any());
+        doThrow(new IllegalStateException(expectedErrorMessage)).when(categoryGateway).update(any());
 
         final var notification = useCase.execute(aCommand).getLeft();
 

@@ -1,7 +1,8 @@
 package com.fullcle.admin.catalogo.application.category.retrieve.list;
 
+import com.fullcle.admin.catalogo.application.UseCaseTest;
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
 import org.junit.jupiter.api.Assertions;
@@ -17,18 +18,17 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.eq;
 
-@ExtendWith(MockitoExtension.class)
-public class ListCategoriesUseCaseTest {
+public class ListCategoriesUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultListCategoriesUseCase useCase;
 
     @Mock
-    private CategoryGeteway CategoryGeteway;
+    private CategoryGateway CategoryGateway;
 
-    @BeforeEach
-    void cleanUp() {
-        Mockito.reset(CategoryGeteway);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(CategoryGateway);
     }
 
     @Test
@@ -52,7 +52,7 @@ public class ListCategoriesUseCaseTest {
         final var expectedItemsCount = 2;
         final var expectedResult = expectedPagination.map(CategoryListOutput::from);
 
-        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenReturn(expectedPagination);
+        Mockito.when(CategoryGateway.findAll(eq(aQuery))).thenReturn(expectedPagination);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -81,7 +81,7 @@ public class ListCategoriesUseCaseTest {
         final var expectedItemsCount = 0;
         final var expectedResult = expectedPagination.map(CategoryListOutput::from);
 
-        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenReturn(expectedPagination);
+        Mockito.when(CategoryGateway.findAll(eq(aQuery))).thenReturn(expectedPagination);
 
         final var actualResult = useCase.execute(aQuery);
 
@@ -108,7 +108,7 @@ public class ListCategoriesUseCaseTest {
 
         final var aQuery = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenThrow(new IllegalStateException(expectedErrorMessage));
+        Mockito.when(CategoryGateway.findAll(eq(aQuery))).thenThrow(new IllegalStateException(expectedErrorMessage));
 
         final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(aQuery));
 

@@ -1,11 +1,11 @@
 package com.fullcle.admin.catalogo.application.genre.create;
 
 
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcle.admin.catalogo.domain.genre.Genre;
-import com.fullcle.admin.catalogo.domain.genre.GenreGeteway;
+import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcle.admin.catalogo.domain.validation.Error;
 import com.fullcle.admin.catalogo.domain.validation.ValidationHandler;
 import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 
 public class DefaultCreateGenreUseCase extends CreateGenreUseCase {
 
-    private final CategoryGeteway categoryGateway;
-    private final GenreGeteway genreGateway;
+    private final CategoryGateway categoryGateway;
+    private final GenreGateway genreGateway;
 
-    public DefaultCreateGenreUseCase(final CategoryGeteway categoryGateway, final GenreGeteway genreGateway) {
+    public DefaultCreateGenreUseCase(final CategoryGateway categoryGateway, final GenreGateway genreGateway) {
         this.categoryGateway = Objects.requireNonNull(categoryGateway);
         this.genreGateway = Objects.requireNonNull(genreGateway);
     }

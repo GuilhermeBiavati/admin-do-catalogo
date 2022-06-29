@@ -1,24 +1,21 @@
 package com.fullcle.admin.catalogo.application.genre.delete;
 
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
-import com.fullcle.admin.catalogo.domain.category.CategoryID;
+import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
+import com.fullcle.admin.catalogo.domain.genre.GenreID;
 
 import java.util.Objects;
 
 public class DefaultDeleteGenreUseCase extends DeleteGenreUseCase {
 
-    private final CategoryGeteway CategoryGeteway;
+    private final GenreGateway genreGateway;
 
-    public DefaultDeleteGenreUseCase(final CategoryGeteway CategoryGeteway) {
-        this.CategoryGeteway = Objects.requireNonNull(CategoryGeteway);
+    public DefaultDeleteGenreUseCase(final GenreGateway genreGateway) {
+        this.genreGateway = Objects.requireNonNull(genreGateway);
     }
 
     @Override
     public void execute(final String anId) {
-        this.CategoryGeteway.deleteById(CategoryID.from(anId));
+        this.genreGateway.deleteById(GenreID.from(anId));
     }
-
-
-
 
 }

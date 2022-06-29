@@ -2,7 +2,7 @@ package com.fullcle.admin.catalogo.application.category.retrieve.get;
 
 import com.fullcle.admin.catalogo.IntegrationTest;
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
@@ -30,7 +30,7 @@ public class GetCategoryByIdUseCaseIT {
     private CategoryRepository categoryRepository;
 
     @SpyBean
-    private CategoryGeteway categoryGeteway;
+    private CategoryGateway categoryGateway;
 
     @Test
     public void givenAValidId_whenCallsGetCategory_shouldReturnCategory() {
@@ -73,7 +73,7 @@ public class GetCategoryByIdUseCaseIT {
         final var expectedErrorMessage = "Gateway error";
         final var expectedId = CategoryID.from("123");
 
-        doThrow(new IllegalStateException(expectedErrorMessage)).when(categoryGeteway).findById(eq(expectedId));
+        doThrow(new IllegalStateException(expectedErrorMessage)).when(categoryGateway).findById(eq(expectedId));
 
         final var actualException = Assertions.assertThrows(
                 IllegalStateException.class, () -> useCase.execute(expectedId.getValue())

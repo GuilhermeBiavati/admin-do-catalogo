@@ -1,121 +1,145 @@
 package com.fullcle.admin.catalogo.application.genre.retrieve.list;
 
-import com.fullcle.admin.catalogo.application.category.retrieve.list.CategoryListOutput;
-import com.fullcle.admin.catalogo.application.category.retrieve.list.DefaultListCategoriesUseCase;
-import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
-import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
+import com.fullcle.admin.catalogo.application.UseCaseTest;
+import com.fullcle.admin.catalogo.domain.genre.Genre;
+import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
+import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-public class ListGenreUseCaseTest {
+public class ListGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
-    private DefaultListCategoriesUseCase useCase;
+    private DefaultListGenreUseCase useCase;
 
     @Mock
-    private CategoryGeteway CategoryGeteway;
+    private GenreGateway genreGateway;
 
-    @BeforeEach
-    void cleanUp() {
-        Mockito.reset(CategoryGeteway);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(genreGateway);
     }
 
     @Test
-    public void givenAValidQuery_whenCallsListCategories_thenShouldReturnCategories() {
-
-        final var categories = List.of(
-                Category.newCategory("Filmes", null, true),
-                Category.newCategory("Series", null, true)
+    public void givenAValidQuery_whenCallsListGenre_shouldReturnGenres() {
+        // given
+        final var genres = List.of(
+                Genre.newGenre("Ação", true),
+                Genre.newGenre("Aventura", true)
         );
 
         final var expectedPage = 0;
         final var expectedPerPage = 10;
-        final var expectedTerms = "";
+        final var expectedTerms = "A";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
+        final var expectedTotal = 2;
 
-        final var aQuery = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var expectedItems = genres.stream()
+                .map(GenreListOutput::from)
+                .toList();
 
-        final var expectedPagination = new Pagination<>(expectedPage, expectedPerPage, categories.size(), categories);
+        final var expectedPagination = new Pagination<>(
+                expectedPage,
+                expectedPerPage,
+                expectedTotal,
+                genres
+        );
 
-        final var expectedItemsCount = 2;
-        final var expectedResult = expectedPagination.map(CategoryListOutput::from);
+        when(genreGateway.findAll(any()))
+                .thenReturn(expectedPagination);
 
-        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenReturn(expectedPagination);
+        final var aQuery =
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        final var actualResult = useCase.execute(aQuery);
+        // when
+        final var actualOutput = useCase.execute(aQuery);
 
-        Assertions.assertEquals(expectedItemsCount, actualResult.items().size());
-        Assertions.assertEquals(expectedResult, actualResult);
-        Assertions.assertEquals(expectedPage, actualResult.currentPage());
-        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
-        Assertions.assertEquals(categories.size(), actualResult.total());
+        // then
+        Assertions.assertEquals(expectedPage, actualOutput.currentPage());
+        Assertions.assertEquals(expectedPerPage, actualOutput.perPage());
+        Assertions.assertEquals(expectedTotal, actualOutput.total());
+        Assertions.assertEquals(expectedItems, actualOutput.items());
 
+        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
     }
 
     @Test
-    public void givenAValidQuery_whenHasNoResults_thenShouldReturnEmptyCategories() {
-        final var categories = List.<Category>of();
+    public void givenAValidQuery_whenCallsListGenreAndResultIsEmpty_shouldReturnGenres() {
+        // given
+        final var genres = List.<Genre>of();
 
         final var expectedPage = 0;
         final var expectedPerPage = 10;
-        final var expectedTerms = "";
+        final var expectedTerms = "A";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
+        final var expectedTotal = 0;
 
-        final var aQuery = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        final var expectedItems = List.<GenreListOutput>of();
 
-        final var expectedPagination = new Pagination<>(expectedPage, expectedPerPage, categories.size(), categories);
+        final var expectedPagination = new Pagination<>(
+                expectedPage,
+                expectedPerPage,
+                expectedTotal,
+                genres
+        );
 
-        final var expectedItemsCount = 0;
-        final var expectedResult = expectedPagination.map(CategoryListOutput::from);
+        when(genreGateway.findAll(any()))
+                .thenReturn(expectedPagination);
 
-        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenReturn(expectedPagination);
+        final var aQuery =
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        final var actualResult = useCase.execute(aQuery);
+        // when
+        final var actualOutput = useCase.execute(aQuery);
 
-        Assertions.assertEquals(expectedItemsCount, actualResult.items().size());
-        Assertions.assertEquals(expectedResult, actualResult);
-        Assertions.assertEquals(expectedPage, actualResult.currentPage());
-        Assertions.assertEquals(expectedPerPage, actualResult.perPage());
-        Assertions.assertEquals(categories.size(), actualResult.total());
+        // then
+        Assertions.assertEquals(expectedPage, actualOutput.currentPage());
+        Assertions.assertEquals(expectedPerPage, actualOutput.perPage());
+        Assertions.assertEquals(expectedTotal, actualOutput.total());
+        Assertions.assertEquals(expectedItems, actualOutput.items());
+
+        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
     }
 
     @Test
-    public void givenAValidQuery_whenGatewayThrowsException_thenShouldReturnException() {
-        final var categories = List.of(
-                Category.newCategory("Filmes", null, true),
-                Category.newCategory("Series", null, true)
-        );
+    public void givenAValidQuery_whenCallsListGenreAndGatewayThrowsRandomError_shouldReturnException() {
+        // given
+        final var expectedPage = 0;
+        final var expectedPerPage = 10;
+        final var expectedTerms = "A";
+        final var expectedSort = "createdAt";
+        final var expectedDirection = "asc";
 
         final var expectedErrorMessage = "Gateway error";
-        final var expectedPage = 0;
-        final var expectedPerPage = 10;
-        final var expectedTerms = "";
-        final var expectedSort = "createdAt";
-        final var expectedDirection = "asc";
 
-        final var aQuery = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
+        when(genreGateway.findAll(any()))
+                .thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        Mockito.when(CategoryGeteway.findAll(eq(aQuery))).thenThrow(new IllegalStateException(expectedErrorMessage));
+        final var aQuery =
+                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 
-        final var actualException = Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(aQuery));
+        // when
+        final var actualOutput = Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> useCase.execute(aQuery)
+        );
 
-        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        // then
+        Assertions.assertEquals(expectedErrorMessage, actualOutput.getMessage());
+
+        Mockito.verify(genreGateway, times(1)).findAll(eq(aQuery));
     }
-
-
 }

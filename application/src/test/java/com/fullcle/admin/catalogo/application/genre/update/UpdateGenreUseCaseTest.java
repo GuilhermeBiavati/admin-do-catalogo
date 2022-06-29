@@ -1,21 +1,14 @@
 package com.fullcle.admin.catalogo.application.genre.update;
 
-import com.fullcle.admin.catalogo.application.genre.update.DefaultUpdateGenreUseCase;
-import com.fullcle.admin.catalogo.application.genre.update.UpdateGenreCommand;
-import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.application.UseCaseTest;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcle.admin.catalogo.domain.genre.Genre;
-import com.fullcle.admin.catalogo.domain.genre.GenreGeteway;
-import com.fullcle.admin.catalogo.domain.genre.GenreID;
-import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,22 +19,20 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-public class UpdateGenreUseCaseTest {
+public class UpdateGenreUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultUpdateGenreUseCase useCase;
 
     @Mock
-    private GenreGeteway genreGateway;
+    private GenreGateway genreGateway;
 
     @Mock
-    private CategoryGeteway categoryGateway;
+    private CategoryGateway categoryGateway;
 
-    @BeforeEach
-    void cleanUp() {
-        Mockito.reset(genreGateway);
-        Mockito.reset(categoryGateway);
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(categoryGateway, genreGateway);
     }
 
     //    Teste do caminho feliz
@@ -269,5 +260,6 @@ public class UpdateGenreUseCaseTest {
     private List<String> asString(final List<CategoryID> categories) {
         return categories.stream().map(CategoryID::getValue).toList();
     }
+
 
 }

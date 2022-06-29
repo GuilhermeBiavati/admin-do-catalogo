@@ -2,7 +2,7 @@ package com.fullcle.admin.catalogo.application.category.delete;
 
 import com.fullcle.admin.catalogo.IntegrationTest;
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
 import com.fullcle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
@@ -28,7 +28,7 @@ public class DeleteGenreUseCaseIT {
     private CategoryRepository categoryRepository;
 
     @SpyBean
-    private CategoryGeteway categoryGeteway;
+    private CategoryGateway categoryGateway;
 
     @Test
     public void givenAValidId_whenCallsDeleteCategory_shouldBeOK() {
@@ -50,15 +50,15 @@ public class DeleteGenreUseCaseIT {
     }
 
     @Test
-    public void givenAValidId_whenGetewayThrowsException_shouldReturnException() {
+    public void givenAValidId_whenGatewayThrowsException_shouldReturnException() {
         final var aCategory = Category.newCategory("Filmes", "A categoria mais assistida", true);
         final var expectedId = aCategory.getId();
 
-        doThrow(new IllegalStateException("Gateway error")).when(categoryGeteway).deleteById(eq(expectedId));
+        doThrow(new IllegalStateException("Gateway error")).when(categoryGateway).deleteById(eq(expectedId));
 
         Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(expectedId.getValue()));
 
-        Mockito.verify(categoryGeteway, times(1)).deleteById(eq(expectedId));
+        Mockito.verify(categoryGateway, times(1)).deleteById(eq(expectedId));
     }
 
     private void save(final Category... aCategory) {

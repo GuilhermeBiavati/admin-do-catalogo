@@ -6,7 +6,7 @@ import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 import java.util.List;
 import java.util.Optional;
 
-public interface CategoryGeteway {
+public interface CategoryGateway {
     Category create(Category aCategory);
 
     void deleteById(CategoryID anId);

@@ -1,7 +1,7 @@
 package com.fullcle.admin.catalogo.infrastructure.category.persistence;
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import static com.fullcle.admin.catalogo.infrastructure.utils.SpecificationUtils.like;
 
 @Component
-public class CategoryMySQLGateway implements CategoryGeteway {
+public class CategoryMySQLGateway implements CategoryGateway {
 
     private final CategoryRepository repository;
 

@@ -2,7 +2,7 @@ package com.fullcle.admin.catalogo.application.category.retrieve.get;
 
 import com.fullcle.admin.catalogo.application.UseCaseTest;
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ public class GetCategoryByIdUseCaseTest extends UseCaseTest {
     private DefaultGetCategoryByIdUseCase useCase;
 
     @Mock
-    private CategoryGeteway categoryGateway;
+    private CategoryGateway categoryGateway;
 
     @Override
     protected List<Object> getMocks() {

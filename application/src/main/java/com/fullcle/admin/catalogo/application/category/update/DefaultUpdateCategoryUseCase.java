@@ -2,7 +2,7 @@ package com.fullcle.admin.catalogo.application.category.update;
 
 
 import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.domain.category.CategoryID;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
 import com.fullcle.admin.catalogo.domain.exceptions.NotFoundException;
@@ -20,17 +20,17 @@ import static io.vavr.API.Try;
 
 public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
 
-    private CategoryGeteway CategoryGeteway;
+    private CategoryGateway CategoryGateway;
 
-    public DefaultUpdateCategoryUseCase(CategoryGeteway CategoryGeteway) {
-        this.CategoryGeteway = Objects.requireNonNull(CategoryGeteway);
+    public DefaultUpdateCategoryUseCase(CategoryGateway CategoryGateway) {
+        this.CategoryGateway = Objects.requireNonNull(CategoryGateway);
     }
 
     @Override
     public Either<Notification, UpdateCategoryOutput> execute(final UpdateCategoryCommand aCommand) {
         final var anId = CategoryID.from(aCommand.id());
 
-        final var aCategory = this.CategoryGeteway.findById(anId).orElseThrow(notFound(anId));
+        final var aCategory = this.CategoryGateway.findById(anId).orElseThrow(notFound(anId));
 
         final var notification = Notification.create();
 
@@ -40,7 +40,7 @@ public class DefaultUpdateCategoryUseCase extends UpdateCategoryUseCase {
     }
 
     private Either<Notification, UpdateCategoryOutput> update(final Category aCategory) {
-        return Try(() -> this.CategoryGeteway.update(aCategory))
+        return Try(() -> this.CategoryGateway.update(aCategory))
                 .toEither()
                 .bimap(Notification::create, UpdateCategoryOutput::from);
     }

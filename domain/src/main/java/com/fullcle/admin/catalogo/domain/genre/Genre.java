@@ -50,13 +50,14 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
     public static Genre with(final GenreID anId,
                              final String name,
                              final boolean active,
+                             final List<CategoryID> categories,
                              final Instant createdAt,
                              final Instant updatedAt,
                              final Instant deletedAt) {
         return new Genre(
                 anId,
                 name,
-                new ArrayList<>(),
+                categories,
                 active,
                 createdAt,
                 updatedAt,
@@ -69,6 +70,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
                 aGenre.getId(),
                 aGenre.name,
                 aGenre.isActive(),
+                new ArrayList<>(aGenre.getCategories()),
                 aGenre.createdAt,
                 aGenre.updatedAt,
                 aGenre.deletedAt

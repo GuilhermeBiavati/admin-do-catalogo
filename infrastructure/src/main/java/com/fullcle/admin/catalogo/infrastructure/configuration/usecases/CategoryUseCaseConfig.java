@@ -10,42 +10,42 @@ import com.fullcle.admin.catalogo.application.category.retrieve.list.DefaultList
 import com.fullcle.admin.catalogo.application.category.retrieve.list.ListCategoriesUseCase;
 import com.fullcle.admin.catalogo.application.category.update.DefaultUpdateCategoryUseCase;
 import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryUseCase;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CategoryUseCaseConfig {
 
-    private final CategoryGeteway categoryGeteway;
+    private final CategoryGateway categoryGateway;
 
-    public CategoryUseCaseConfig(final CategoryGeteway categoryGeteway) {
-        this.categoryGeteway = categoryGeteway;
+    public CategoryUseCaseConfig(final CategoryGateway categoryGateway) {
+        this.categoryGateway = categoryGateway;
     }
 
     @Bean
     public CreateCategoryUseCase createCategoryUseCase() {
-        return new DefaultCreateCategoryUseCase(categoryGeteway);
+        return new DefaultCreateCategoryUseCase(categoryGateway);
     }
 
     @Bean
     public UpdateCategoryUseCase updateCategoryUseCase() {
-        return new DefaultUpdateCategoryUseCase(categoryGeteway);
+        return new DefaultUpdateCategoryUseCase(categoryGateway);
     }
 
     @Bean
     public GetCategoryByIdUseCase getCategoryByIdUseCase() {
-        return new DefaultGetCategoryByIdUseCase(categoryGeteway);
+        return new DefaultGetCategoryByIdUseCase(categoryGateway);
     }
 
     @Bean
     public ListCategoriesUseCase listCategoriesUseCase() {
-        return new DefaultListCategoriesUseCase(categoryGeteway);
+        return new DefaultListCategoriesUseCase(categoryGateway);
     }
 
     @Bean
     public DeleteCategoryUseCase deleteCategoryUseCase() {
-        return new DefaultDeleteCategoryUseCase(categoryGeteway);
+        return new DefaultDeleteCategoryUseCase(categoryGateway);
     }
 
 }

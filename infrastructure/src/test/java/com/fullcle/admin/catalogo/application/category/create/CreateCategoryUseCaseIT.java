@@ -1,7 +1,7 @@
 package com.fullcle.admin.catalogo.application.category.create;
 
 import com.fullcle.admin.catalogo.IntegrationTest;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class CreateCategoryUseCaseIT {
     private CategoryRepository categoryRepository;
 
     @SpyBean
-    private CategoryGeteway categoryGeteway;
+    private CategoryGateway categoryGateway;
 
     @Test
     public void givenAValidCommand_whenCallsCreateCategory_shouldReturnCategoryId() {
@@ -76,7 +76,7 @@ public class CreateCategoryUseCaseIT {
 
         Assertions.assertEquals(0, categoryRepository.count());
 
-        Mockito.verify(categoryGeteway, times(0)).create(any());
+        Mockito.verify(categoryGateway, times(0)).create(any());
 
     }
 
@@ -117,7 +117,7 @@ public class CreateCategoryUseCaseIT {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        Mockito.doThrow(new IllegalStateException(expectedErrorMessage)).when(categoryGeteway).create(any());
+        Mockito.doThrow(new IllegalStateException(expectedErrorMessage)).when(categoryGateway).create(any());
 
         final var notification = useCase.execute(aCommand).getLeft();
 

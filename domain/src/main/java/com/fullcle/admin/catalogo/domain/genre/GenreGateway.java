@@ -5,7 +5,7 @@ import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 
 import java.util.Optional;
 
-public interface GenreGeteway {
+public interface GenreGateway {
     Genre create(Genre aGenre);
 
     void deleteById(GenreID anId);

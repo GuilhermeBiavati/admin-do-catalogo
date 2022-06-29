@@ -1,19 +1,15 @@
 package com.fullcle.admin.catalogo.application.category.create;
 
-import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGeteway;
-import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
-import com.fullcle.admin.catalogo.domain.validation.handler.Notification;
+import com.fullcle.admin.catalogo.application.UseCaseTest;
+import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -22,18 +18,22 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-public class CreateCategoryUseCaseTest {
+public class CreateCategoryUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultCreateCategoryUseCase useCase;
 
     @Mock
-    private CategoryGeteway CategoryGeteway;
+    private CategoryGateway CategoryGateway;
 
     @BeforeEach
     void cleanUp(){
-        Mockito.reset(CategoryGeteway);
+        Mockito.reset(CategoryGateway);
+    }
+
+    @Override
+    protected List<Object> getMocks() {
+        return List.of(CategoryGateway);
     }
 
 //    Teste do caminho feliz
@@ -49,14 +49,14 @@ public class CreateCategoryUseCaseTest {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(CategoryGeteway.create(any())).thenAnswer(returnsFirstArg());
+        when(CategoryGateway.create(any())).thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(CategoryGeteway, times(1))
+        Mockito.verify(CategoryGateway, times(1))
                 .create(argThat(aCategory -> Objects.equals(expectedName, aCategory.getName())
                         && Objects.equals(expectedDescription, aCategory.getDescription())
                         && Objects.equals(expectedIsActive, aCategory.isActive())
@@ -83,7 +83,7 @@ public class CreateCategoryUseCaseTest {
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(CategoryGeteway, times(0)).create(any());
+        Mockito.verify(CategoryGateway, times(0)).create(any());
 
     }
 
@@ -95,14 +95,14 @@ public class CreateCategoryUseCaseTest {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(CategoryGeteway.create(any())).thenAnswer(returnsFirstArg());
+        when(CategoryGateway.create(any())).thenAnswer(returnsFirstArg());
 
         final var actualOutput = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(CategoryGeteway, times(1))
+        Mockito.verify(CategoryGateway, times(1))
                 .create(argThat(aCategory -> Objects.equals(expectedName, aCategory.getName())
                         && Objects.equals(expectedDescription, aCategory.getDescription())
                         && Objects.equals(expectedIsActive, aCategory.isActive())
@@ -124,14 +124,14 @@ public class CreateCategoryUseCaseTest {
 
         final var aCommand = CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        when(CategoryGeteway.create(any())).thenThrow(new IllegalStateException("Gateway error"));
+        when(CategoryGateway.create(any())).thenThrow(new IllegalStateException("Gateway error"));
 
         final var notification = useCase.execute(aCommand).getLeft();
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(CategoryGeteway, times(1))
+        Mockito.verify(CategoryGateway, times(1))
                 .create(argThat(aCategory -> Objects.equals(expectedName, aCategory.getName())
                         && Objects.equals(expectedDescription, aCategory.getDescription())
                         && Objects.equals(expectedIsActive, aCategory.isActive())
