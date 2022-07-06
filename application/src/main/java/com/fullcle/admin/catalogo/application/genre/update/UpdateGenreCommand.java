@@ -17,4 +17,6 @@ public record UpdateGenreCommand(
     ) {
         return new UpdateGenreCommand(anId, aName, isActive != null ? isActive : true, categories);
     }
+
+
 }

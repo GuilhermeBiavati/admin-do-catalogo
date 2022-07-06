@@ -1,7 +1,7 @@
-CREATE TABLE category
+CREATE TABLE categories
 (
     id          VARCHAR(36) NOT NULL PRIMARY KEY,
-    name        VARCHAR(36) NOT NULL,
+    name        VARCHAR(255) NOT NULL,
     description VARCHAR(4000),
     active      BOOLEAN     NOT NULL DEFAULT TRUE,
     created_at  DATETIME(6) NOT NULL,

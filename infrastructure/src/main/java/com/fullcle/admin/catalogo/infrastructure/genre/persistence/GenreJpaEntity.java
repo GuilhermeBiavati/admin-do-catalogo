@@ -7,11 +7,14 @@ import com.fullcle.admin.catalogo.domain.genre.GenreID;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "genres")
 public class GenreJpaEntity {
+
+    @Id
     @Column(name = "id", nullable = false)
     private String id;
 
@@ -74,12 +77,14 @@ public class GenreJpaEntity {
                 GenreID.from(getId()),
                 getName(),
                 isActive(),
-                getCategories().stream().map(it -> CategoryID.from(it.getId().getCategoryId())).toList(),
+                getCategoryIDs(),
                 getCreatedAt(),
                 getUpdatedAt(),
                 getDeletedAt()
         );
     }
+
+
 
     private void addCategory(final CategoryID anId) {
         this.categories.add(GenreCategoryJpaEntity.from(this, anId));
@@ -115,6 +120,10 @@ public class GenreJpaEntity {
 
     public Set<GenreCategoryJpaEntity> getCategories() {
         return categories;
+    }
+
+    public List<CategoryID> getCategoryIDs() {
+        return getCategories().stream().map(it -> CategoryID.from(it.getId().getCategoryId())).toList();
     }
 
     public void setCategories(Set<GenreCategoryJpaEntity> categories) {

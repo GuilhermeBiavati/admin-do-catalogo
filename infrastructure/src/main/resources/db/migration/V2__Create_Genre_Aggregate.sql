@@ -14,5 +14,5 @@ CREATE TABLE genres_categories
     category_id VARCHAR(36) NOT NULL,
     CONSTRAINT idx_genre_category unique (genre_id, category_id),
     CONSTRAINT fk_genre_id FOREIGN KEY (genre_id) references genres (id) ON DELETE CASCADE,
-    CONSTRAINT fk_category_id FOREIGN KEY (category_id) references category (id) ON DELETE CASCADE
+    CONSTRAINT fk_category_id FOREIGN KEY (category_id) references categories (id) ON DELETE CASCADE
 );
