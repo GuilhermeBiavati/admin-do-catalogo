@@ -18,7 +18,7 @@ public class Genre extends AggregateRoot<GenreID> implements Cloneable {
 
     private List<CategoryID> categories;
     private boolean active;
-    private Instant createdAt;
+    private final Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
 
