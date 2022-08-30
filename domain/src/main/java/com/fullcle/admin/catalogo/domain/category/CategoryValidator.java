@@ -5,8 +5,8 @@ import com.fullcle.admin.catalogo.domain.validation.ValidationHandler;
 import com.fullcle.admin.catalogo.domain.validation.Validator;
 
 public class CategoryValidator extends Validator {
-    public static final int NAME_MAX_LEGTH = 255;
-    public static final int NAME_MIN_LEGTH = 3;
+    private static final int NAME_MAX_LEGTH = 255;
+    private static final int NAME_MIN_LEGTH = 3;
     private final Category category;
 
     public CategoryValidator(final Category aCategory, final ValidationHandler aHandler) {
