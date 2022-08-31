@@ -1,30 +1,18 @@
 package com.fullcle.admin.catalogo.application.castmember.retrieve.get;
 
-import com.fullcle.admin.catalogo.domain.category.CategoryID;
-import com.fullcle.admin.catalogo.domain.genre.Genre;
-
-import java.time.Instant;
-import java.util.List;
+import com.fullcle.admin.catalogo.domain.castmember.CastMember;
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberType;
 
 public record CastMemberOutput(
-        String id,
         String name,
-        boolean isActive,
-        List<String> categories,
-        Instant createdAt,
-        Instant updatedAt,
-        Instant deletedAt
+        CastMemberType type
 ) {
 
-    public static CastMemberOutput from(final Genre aGenre) {
+    public static CastMemberOutput from(final CastMember aMember) {
+
         return new CastMemberOutput(
-                aGenre.getId().getValue(),
-                aGenre.getName(),
-                aGenre.isActive(),
-                aGenre.getCategories().stream().map(CategoryID::getValue).toList(),
-                aGenre.getCreatedAt(),
-                aGenre.getUpdatedAt(),
-                aGenre.getDeletedAt()
+                aMember.getName(),
+                aMember.getType()
         );
     }
 }

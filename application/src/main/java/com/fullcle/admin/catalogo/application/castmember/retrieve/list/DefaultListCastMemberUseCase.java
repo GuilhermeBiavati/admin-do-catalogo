@@ -1,20 +1,23 @@
 package com.fullcle.admin.catalogo.application.castmember.retrieve.list;
 
-import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
+import java.util.Objects;
+
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberGateway;
 import com.fullcle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcle.admin.catalogo.domain.pagination.SearchQuery;
 
-import java.util.Objects;
-
 public class DefaultListCastMemberUseCase extends ListCastMemberUseCase {
-    private final GenreGateway genreGateway;
 
-    public DefaultListCastMemberUseCase(final GenreGateway genreGateway) {
-        this.genreGateway = Objects.requireNonNull(genreGateway);
+    private final CastMemberGateway castMemberGateway;
+
+    public DefaultListCastMemberUseCase(final CastMemberGateway castMemberGateway) {
+
+        this.castMemberGateway = Objects.requireNonNull(castMemberGateway);
     }
 
     @Override
     public Pagination<CastMemberListOutput> execute(final SearchQuery aQuery) {
-        return this.genreGateway.findAll(aQuery).map(GenreListOutput::from);
+
+        return this.castMemberGateway.findAll(aQuery).map(CastMemberListOutput::from);
     }
 }

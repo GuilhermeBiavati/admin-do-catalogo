@@ -1,21 +1,23 @@
 package com.fullcle.admin.catalogo.application.castmember.delete;
 
-import com.fullcle.admin.catalogo.domain.genre.GenreGateway;
-import com.fullcle.admin.catalogo.domain.genre.GenreID;
-
 import java.util.Objects;
+
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberGateway;
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberID;
 
 public class DefaultDeleteCastMemberUseCase extends DeleteCastMemberUseCase {
 
-    private final GenreGateway genreGateway;
+    private final CastMemberGateway castMemberGateway;
 
-    public DefaultDeleteCastMemberUseCase(final GenreGateway genreGateway) {
-        this.genreGateway = Objects.requireNonNull(genreGateway);
+    public DefaultDeleteCastMemberUseCase(final CastMemberGateway castMemberGateway) {
+
+        this.castMemberGateway = Objects.requireNonNull(castMemberGateway);
     }
 
     @Override
     public void execute(final String anId) {
-        this.genreGateway.deleteById(GenreID.from(anId));
+
+        this.castMemberGateway.deleteById(CastMemberID.from(anId));
     }
 
 }
