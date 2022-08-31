@@ -57,10 +57,9 @@ public class CreateCastMemberUseCaseTest extends UseCaseTest {
         //when
         when(castMemberGateway.create(any())).thenAnswer(returnsFirstArg());
 
-        final var actualOutput = useCase.execute(aCommand).get();
+        final var actualOutput = useCase.execute(aCommand);
 
 //        then
-        Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
         Mockito.verify(castMemberGateway, times(1))
