@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Objects;
 
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,14 +79,13 @@ public class CreateCastMemberUseCaseTest extends UseCaseTest {
     public void givenAInvalidName_whenCallsCreateCastMember_thenShouldReturnDomainException() {
 
         final String expectedName = null;
-        final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = true;
+        final var expectedType = Fixture.CastMember.type();
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
 
-        final var aCommand = CreateCastMemberCommand.with(expectedName, expectedDescription, expectedIsActive);
+        final var aCommand = CreateCastMemberCommand.with(expectedName, expectedType);
 
-        final var notification = useCase.execute(aCommand).getLeft();
+        final var notification = useCase.execute(aCommand);
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
