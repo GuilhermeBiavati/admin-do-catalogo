@@ -17,26 +17,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import com.fullcle.admin.catalogo.application.Fixture;
 import com.fullcle.admin.catalogo.application.UseCaseTest;
-import com.fullcle.admin.catalogo.application.category.update.DefaultUpdateCategoryUseCase;
-import com.fullcle.admin.catalogo.application.category.update.UpdateCategoryCommand;
-import com.fullcle.admin.catalogo.domain.category.Category;
-import com.fullcle.admin.catalogo.domain.category.CategoryGateway;
-import com.fullcle.admin.catalogo.domain.category.CategoryID;
+import com.fullcle.admin.catalogo.domain.castmember.CastMember;
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberGateway;
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberID;
+import com.fullcle.admin.catalogo.domain.castmember.CastMemberType;
 import com.fullcle.admin.catalogo.domain.exceptions.DomainException;
-
+import com.fullcle.admin.catalogo.domain.exceptions.NotificationException;
 
 public class UpdateCastMemberUseCaseTest extends UseCaseTest {
 
     @InjectMocks
-    private DefaultUpdateCategoryUseCase useCase;
-
+    private DefaultUpdateCastMemberUseCase useCase;
     @Mock
-    private CategoryGateway categoryGateway;
+    private CastMemberGateway castMemberGateway;
 
     @Override
     protected List<Object> getMocks() {
-        return List.of(categoryGateway);
+
+        return List.of(castMemberGateway);
     }
 
     //    Teste do caminho feliz
@@ -46,172 +46,121 @@ public class UpdateCastMemberUseCaseTest extends UseCaseTest {
     //    Teste atualizar categoria passando id inválido
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateCategory_shouldReturnCategoryId() {
-        final var aCategory = Category.newCategory("Film", null, true);
+    public void givenAValidCommand_whenCallsUpdateCastMember_shouldReturnCastMemberId() {
 
+        final var aCastMember = CastMember.newMember("Film", CastMemberType.DIRECTOR);
 
-        final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = true;
+        final var expectedName = Fixture.name();
+        final var expectedType = CastMemberType.ACTOR;
+        final var expectedId = aCastMember.getId();
 
-        final var expectedId = aCategory.getId();
-
-        final var aCommand = UpdateCategoryCommand.with(
+        final var aCommand = UpdateCastMemberCommand.with(
                 expectedId.getValue(),
                 expectedName,
-                expectedDescription,
-                expectedIsActive);
+                expectedType
+        );
 
-        Mockito.when(categoryGateway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
+        Mockito.when(castMemberGateway.findById(eq(expectedId))).thenReturn(Optional.of(aCastMember.clone()));
 
-        Mockito.when(categoryGateway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
+        Mockito.when(castMemberGateway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
 
-        final var actualOutput = useCase.execute(aCommand).get();
+        final var actualOutput = useCase.execute(aCommand);
 
         Assertions.assertNotNull(actualOutput);
         Assertions.assertNotNull(actualOutput.id());
 
-        Mockito.verify(categoryGateway, Mockito.times(1)).findById(eq(expectedId));
-        Mockito.verify(categoryGateway, Mockito.times(1)).update(ArgumentMatchers.argThat(
-                aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
-                        && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
-                        && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
-                        && Objects.equals(expectedId, aUpdatedCategory.getId())
-                        && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
-                        && Objects.nonNull(aUpdatedCategory.getUpdatedAt())
-                        && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
-                        && Objects.isNull(aUpdatedCategory.getDeletedAt())
+        Mockito.verify(castMemberGateway, Mockito.times(1)).findById(eq(expectedId));
+        Mockito.verify(castMemberGateway, Mockito.times(1)).update(ArgumentMatchers.argThat(
+                aUpdatedCastMember ->
+                        Objects.equals(expectedName, aUpdatedCastMember.getName())
+                                && Objects.equals(expectedType, aUpdatedCastMember.getType())
+                                && Objects.equals(expectedId, aUpdatedCastMember.getId())
+                                && Objects.equals(aCastMember.getCreatedAt(), aUpdatedCastMember.getCreatedAt())
+                                && Objects.nonNull(aUpdatedCastMember.getUpdatedAt())
+                                && aCastMember.getUpdatedAt().isBefore(aUpdatedCastMember.getUpdatedAt())
         ));
     }
 
     @Test
-    public void givenAInvalidName_whenCallsUpdateCategory_thenShouldReturnDomainException() {
+    public void givenAInvalidName_whenCallsUpdateCastMember_thenShouldThrowsNotoficationException() {
 
-        final var aCategory = Category.newCategory("Film", null, true);
+        final var aCastMember = CastMember.newMember("Film", CastMemberType.DIRECTOR);
 
-        final var expectedId = aCategory.getId();
+        final var expectedId = aCastMember.getId();
         final String expectedName = null;
-        final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = true;
+        final var expectedType = CastMemberType.ACTOR;
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
 
-        final var aCommand = UpdateCategoryCommand.with(expectedId.getValue(), expectedName, expectedDescription, expectedIsActive);
+        final var aCommand = UpdateCastMemberCommand.with(expectedId.getValue(), expectedName, expectedType);
 
-        when(categoryGateway.findById(expectedId)).thenReturn(Optional.of(aCategory.clone()));
+        when(castMemberGateway.findById(expectedId)).thenReturn(Optional.of(aCastMember.clone()));
 
-        final var notification = useCase.execute(aCommand).getLeft();
+        final var notification = Assertions.assertThrows(NotificationException.class, () -> useCase.execute(aCommand));
 
         Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
-        Mockito.verify(categoryGateway, times(0)).update(any());
+        Mockito.verify(castMemberGateway, times(0)).update(any());
 
-    }
-
-    @Test
-    public void givenAValidInactiveteCommand_whenCallsUpdateCategory_shouldReturnInactivatedCategoryId() {
-        final var aCategory = Category.newCategory("Film", null, true);
-
-
-        final var expectedId = aCategory.getId();
-        final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = false;
-        final var aCommand = UpdateCategoryCommand.with(
-                expectedId.getValue(),
-                expectedName,
-                expectedDescription,
-                expectedIsActive);
-
-        Mockito.when(categoryGateway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
-
-        Mockito.when(categoryGateway.update(ArgumentMatchers.any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
-
-        Assertions.assertTrue(aCategory.isActive());
-        Assertions.assertNull(aCategory.getDeletedAt());
-
-        final var actualOutput = useCase.execute(aCommand).get();
-
-        Assertions.assertNotNull(actualOutput);
-        Assertions.assertNotNull(actualOutput.id());
-
-        Mockito.verify(categoryGateway, Mockito.times(1)).findById(eq(expectedId));
-        Mockito.verify(categoryGateway, Mockito.times(1)).update(ArgumentMatchers.argThat(
-                aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
-                        && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
-                        && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
-                        && Objects.equals(expectedId, aUpdatedCategory.getId())
-                        && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
-                        && Objects.nonNull(aUpdatedCategory.getUpdatedAt())
-                        && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
-                        && Objects.nonNull(aUpdatedCategory.getDeletedAt())
-        ));
     }
 
     @Test
     public void givenAValidCommand_whenGatewayThrowsRandomException_shouldReturnAException() {
-        final var aCategory = Category.newCategory("Ação", "Filmes que contem algo", true);
 
-        final var expectedId = aCategory.getId();
-        final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = true;
+        final var aCastMember = CastMember.newMember("Ação", CastMemberType.ACTOR);
+
+        final var expectedId = aCastMember.getId();
+        final var expectedName = Fixture.name();
+        final var expectedType = CastMemberType.DIRECTOR;
         final var expectedErrorMessage = "Gateway error";
         final var expectedErrorCount = 1;
 
-        final var aCommand = UpdateCategoryCommand.with(
+        final var aCommand = UpdateCastMemberCommand.with(
                 expectedId.getValue(),
                 expectedName,
-                expectedDescription,
-                expectedIsActive);
+                expectedType);
 
-        Mockito.when(categoryGateway.findById(eq(expectedId))).thenReturn(Optional.of(aCategory.clone()));
+        Mockito.when(castMemberGateway.findById(eq(expectedId))).thenReturn(Optional.of(aCastMember.clone()));
 
-        when(categoryGateway.update(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
+        when(castMemberGateway.update(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        final var notification = useCase.execute(aCommand).getLeft();
+        final var actualOutput = Assertions.assertThrows(NotificationException.class, () -> useCase.execute(aCommand));
 
-        Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
-        Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
+//        Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualOutput.getMessage());
 
-        Mockito.verify(categoryGateway, Mockito.times(1)).update(ArgumentMatchers.argThat(
-                aUpdatedCategory -> Objects.equals(expectedName, aUpdatedCategory.getName())
-                        && Objects.equals(expectedDescription, aUpdatedCategory.getDescription())
-                        && Objects.equals(expectedIsActive, aUpdatedCategory.isActive())
-                        && Objects.equals(expectedId, aUpdatedCategory.getId())
-                        && Objects.equals(aCategory.getCreatedAt(), aUpdatedCategory.getCreatedAt())
-                        && Objects.nonNull(aUpdatedCategory.getUpdatedAt())
-                        && aCategory.getUpdatedAt().isBefore(aUpdatedCategory.getUpdatedAt())
-                        && Objects.isNull(aUpdatedCategory.getDeletedAt())
+        Mockito.verify(castMemberGateway, Mockito.times(1)).update(ArgumentMatchers.argThat(
+                aUpdatedCastMember -> Objects.equals(expectedName, aUpdatedCastMember.getName())
+                        && Objects.equals(expectedType, aUpdatedCastMember.getType())
+                        && Objects.equals(expectedId, aUpdatedCastMember.getId())
+                        && Objects.equals(aCastMember.getCreatedAt(), aUpdatedCastMember.getCreatedAt())
+                        && Objects.nonNull(aUpdatedCastMember.getUpdatedAt())
+                        && aCastMember.getUpdatedAt().isBefore(aUpdatedCastMember.getUpdatedAt())
         ));
     }
 
     @Test
-    public void givenAValidCommandWithInvalidID_whenCallsUpdateCategory_shouldReturnNotFoundException() {
+    public void givenAValidCommandWithInvalidID_whenCallsUpdateCastMember_shouldReturnNotFoundException() {
 
-        final var expectedId = "123";
-        final var expectedName = "Filmes";
-        final var expectedDescription = "A categoria mais assistida";
-        final var expectedIsActive = false;
-        final var expectedErrorMessage = "Category with ID 123 was not found";
-        final var expectedErrorCount = 1;
+        final var expectedId = Fixture.uuid();
+        final var expectedName = Fixture.name();
+        final var expectedType = Fixture.CastMember.type();
+        final var expectedErrorMessage = String.format("CastMember with ID %s was not found", expectedId);
 
-        final var aCommand = UpdateCategoryCommand.with(
+        final var aCommand = UpdateCastMemberCommand.with(
                 expectedId,
                 expectedName,
-                expectedDescription,
-                expectedIsActive);
+                expectedType);
 
-        Mockito.when(categoryGateway.findById(eq(CategoryID.from(expectedId)))).thenReturn(Optional.empty());
+        Mockito.when(castMemberGateway.findById(eq(CastMemberID.from(expectedId)))).thenReturn(Optional.empty());
 
         final var actualException = Assertions.assertThrows(DomainException.class, () -> useCase.execute(aCommand));
 
-
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
 
-        Mockito.verify(categoryGateway, Mockito.times(1)).findById(eq(CategoryID.from(expectedId)));
-        Mockito.verify(categoryGateway, Mockito.times(0)).update(any());
+        Mockito.verify(castMemberGateway, Mockito.times(1)).findById(eq(CastMemberID.from(expectedId)));
+        Mockito.verify(castMemberGateway, Mockito.times(0)).update(any());
     }
 
 }

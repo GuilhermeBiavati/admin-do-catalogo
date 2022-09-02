@@ -11,6 +11,11 @@ public final class Fixture {
 
     private static final Faker FAKER = new Faker();
 
+    public static String uuid() {
+
+        return FAKER.internet().uuid();
+    }
+
     public static String name() {
 
         return FAKER.name().fullName();
