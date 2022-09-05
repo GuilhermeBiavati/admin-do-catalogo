@@ -138,7 +138,6 @@ public class CreateCategoryUseCaseTest extends UseCaseTest {
                         && Objects.nonNull(aCategory.getId())
                         && Objects.nonNull(aCategory.getCreatedAt())
                         && Objects.nonNull(aCategory.getUpdatedAt())
-                        && Objects.nonNull(aCategory.getUpdatedAt())
                         && Objects.isNull(aCategory.getDeletedAt())
                 ));
     }
