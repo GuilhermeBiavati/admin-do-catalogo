@@ -1,4 +1,4 @@
-package com.fullcycle.admin.catalogo.infrastructure.video.percistence;
+package com.fullcycle.admin.catalogo.infrastructure.video.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

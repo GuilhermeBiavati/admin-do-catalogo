@@ -1,8 +1,9 @@
-package com.fullcycle.admin.catalogo.infrastructure.video.percistence;
+package com.fullcycle.admin.catalogo.infrastructure.video.persistence;
 
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
+import com.fullcycle.admin.catalogo.domain.utils.CollectionUtils;
 import com.fullcycle.admin.catalogo.domain.video.Rating;
 import com.fullcycle.admin.catalogo.domain.video.Video;
 import com.fullcycle.admin.catalogo.domain.video.VideoID;
@@ -28,19 +29,17 @@ public class VideoJpaEntity {
 
     @Column(name = "description", length = 4000)
     private String description;
-
-
+    
     @Column(name = "year_launched", nullable = false)
     private int yearLaunched;
 
     @Column(name = "opened", nullable = false)
-    private boolean openend;
+    private boolean opened;
 
     @Column(name = "published", nullable = false)
     private boolean published;
 
     @Column(name = "rating", nullable = false)
-    @Enumerated(EnumType.STRING)
     private Rating rating;
 
     @Column(name = "duration", precision = 2)
@@ -90,7 +89,7 @@ public class VideoJpaEntity {
             final String title,
             final String description,
             final int yearLaunched,
-            final boolean openend,
+            final boolean opened,
             final boolean published,
             final Rating rating,
             final double duration,
@@ -106,7 +105,7 @@ public class VideoJpaEntity {
         this.title = title;
         this.description = description;
         this.yearLaunched = yearLaunched;
-        this.openend = openend;
+        this.opened = opened;
         this.published = published;
         this.rating = rating;
         this.duration = duration;
@@ -168,7 +167,7 @@ public class VideoJpaEntity {
                 getDescription(),
                 Year.of(getYearLaunched()),
                 getDuration(),
-                isOpenend(),
+                isOpened(),
                 isPublished(),
                 getRating(),
                 getCreatedAt(),
@@ -216,12 +215,12 @@ public class VideoJpaEntity {
         this.yearLaunched = yearLaunched;
     }
 
-    public boolean isOpenend() {
-        return openend;
+    public boolean isOpened() {
+        return opened;
     }
 
-    public void setOpenend(boolean openend) {
-        this.openend = openend;
+    public void setOpened(boolean opened) {
+        this.opened = opened;
     }
 
     public boolean isPublished() {
@@ -326,5 +325,17 @@ public class VideoJpaEntity {
 
     public void setCastMembers(Set<VideoCastMemberJpaEntity> castMembers) {
         this.castMembers = castMembers;
+    }
+
+    public Set<CategoryID> getCategoriesID() {
+        return CollectionUtils.mapTo(getCategories(), it -> CategoryID.from(it.getId().getCategoryId()));
+    }
+
+    public Set<GenreID> getGenresID() {
+        return CollectionUtils.mapTo(getGenres(), it -> GenreID.from(it.getId().getGenreId()));
+    }
+
+    public Set<CastMemberID> getCastMembersID() {
+        return CollectionUtils.mapTo(getCastMembers(), it -> CastMemberID.from(it.getId().getCastMemberId()));
     }
 }
