@@ -1,5 +1,6 @@
 package com.fullcycle.admin.catalogo.infrastructure.video;
 
+import com.fullcycle.admin.catalogo.domain.video.Resource;
 import com.fullcycle.admin.catalogo.domain.video.*;
 import com.fullcycle.admin.catalogo.infrastructure.configuration.properties.storage.StorageProperties;
 import com.fullcycle.admin.catalogo.infrastructure.services.StorageService;

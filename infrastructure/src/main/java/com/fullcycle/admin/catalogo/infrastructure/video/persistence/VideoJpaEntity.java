@@ -29,7 +29,7 @@ public class VideoJpaEntity {
 
     @Column(name = "description", length = 4000)
     private String description;
-    
+
     @Column(name = "year_launched", nullable = false)
     private int yearLaunched;
 
