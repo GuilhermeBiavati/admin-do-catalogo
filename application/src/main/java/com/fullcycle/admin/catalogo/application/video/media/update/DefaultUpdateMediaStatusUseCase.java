@@ -1,4 +1,4 @@
-package com.fullcycle.admin.catalogo.application.media.update;
+package com.fullcycle.admin.catalogo.application.video.media.update;
 
 import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.domain.video.*;

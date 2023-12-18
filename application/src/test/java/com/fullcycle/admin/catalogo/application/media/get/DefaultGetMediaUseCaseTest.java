@@ -1,6 +1,8 @@
-package com.fullcycle.admin.catalogo.application.video.media.get;
+package com.fullcycle.admin.catalogo.application.media.get;
 
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
+import com.fullcycle.admin.catalogo.application.video.media.get.DefaultGetMediaUseCase;
+import com.fullcycle.admin.catalogo.application.video.media.get.GetMediaCommand;
 import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.domain.video.MediaResourceGateway;
@@ -9,13 +11,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
 
-public class GetMediaUseCaseTest extends UseCaseTest {
+public class DefaultGetMediaUseCaseTest extends UseCaseTest {
 
     @InjectMocks
     private DefaultGetMediaUseCase useCase;
@@ -25,45 +27,49 @@ public class GetMediaUseCaseTest extends UseCaseTest {
 
     @Override
     protected List<Object> getMocks() {
-        return List.of(mediaResourceGateway);
+        return null;
     }
 
     @Test
     public void givenVideoIdAndType_whenIsValidCmd_shouldReturnResource() {
-        // given
+
+//        given
         final var expectedId = VideoID.unique();
         final var expectedType = Fixture.Videos.mediaType();
         final var expectedResource = Fixture.Videos.resource(expectedType);
 
-        when(mediaResourceGateway.getResource(expectedId, expectedType))
+        Mockito.when(mediaResourceGateway.getResource(expectedId, expectedType))
                 .thenReturn(Optional.of(expectedResource));
 
         final var aCmd = GetMediaCommand.with(expectedId.getValue(), expectedType.name());
 
-        // when
+//        when
+
         final var actualResult = this.useCase.execute(aCmd);
 
-        // then
+//        then
+
         Assertions.assertEquals(expectedResource.name(), actualResult.name());
         Assertions.assertEquals(expectedResource.content(), actualResult.content());
         Assertions.assertEquals(expectedResource.contentType(), actualResult.contentType());
+
     }
 
     @Test
-    public void givenVideoIdAndType_whenIsNotFound_shouldReturnNotFoundException() {
-        // given
+    public void givenVideoIdAndType_whenIsNotFound_shouldReturnNotFoundExcption() {
+
+        //given
         final var expectedId = VideoID.unique();
         final var expectedType = Fixture.Videos.mediaType();
 
-        when(mediaResourceGateway.getResource(expectedId, expectedType))
+        Mockito.when(mediaResourceGateway.getResource(expectedId, expectedType))
                 .thenReturn(Optional.empty());
 
         final var aCmd = GetMediaCommand.with(expectedId.getValue(), expectedType.name());
 
-        // when
-        Assertions.assertThrows(NotFoundException.class, () -> {
-            this.useCase.execute(aCmd);
-        });
+        //when
+        Assertions.assertThrows(NotFoundException.class, () -> this.useCase.execute(aCmd));
+
     }
 
     @Test

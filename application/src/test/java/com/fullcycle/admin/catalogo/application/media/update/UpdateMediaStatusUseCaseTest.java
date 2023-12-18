@@ -1,6 +1,8 @@
-package com.fullcycle.admin.catalogo.application.video.media.update;
+package com.fullcycle.admin.catalogo.application.media.update;
 
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
+import com.fullcycle.admin.catalogo.application.video.media.update.DefaultUpdateMediaStatusUseCase;
+import com.fullcycle.admin.catalogo.application.video.media.update.UpdateMediaStatusCommand;
 import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.video.MediaStatus;
 import com.fullcycle.admin.catalogo.domain.video.Video;

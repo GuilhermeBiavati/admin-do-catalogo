@@ -1,12 +1,12 @@
 package com.fullcycle.admin.catalogo.infrastructure.category.models;
 
-import com.fullcycle.admin.catalogo.JacksonTets;
+import com.fullcycle.admin.catalogo.JacksonTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.json.JacksonTester;
 
-@JacksonTets
+@JacksonTest
 public class CreateCategoryRequestTest {
 
     @Autowired

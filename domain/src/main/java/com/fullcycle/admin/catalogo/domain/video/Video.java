@@ -364,6 +364,9 @@ public class Video extends AggregateRoot<VideoID> {
     }
 
     public Video completed(final VideoMediaType aType, final String encodedPath) {
+
+        // TODO ESTUDAR PATTERN VISITOR OU OUTRA FORMA DE FAZER ISSO Q ESTA ABAIXO MELHOR
+
         if (VideoMediaType.VIDEO == aType) {
             getVideo()
                     .ifPresent(media -> updateVideoMedia(media.completed(encodedPath)));

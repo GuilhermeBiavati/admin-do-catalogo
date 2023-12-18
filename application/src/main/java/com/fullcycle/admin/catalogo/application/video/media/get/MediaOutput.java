@@ -1,4 +1,4 @@
-package com.fullcycle.admin.catalogo.application.media.get;
+package com.fullcycle.admin.catalogo.application.video.media.get;
 
 import com.fullcycle.admin.catalogo.domain.video.Resource;
 

@@ -1,6 +1,8 @@
-package com.fullcycle.admin.catalogo.application.video.media.upload;
+package com.fullcycle.admin.catalogo.application.media.upload;
 
 import com.fullcycle.admin.catalogo.application.UseCaseTest;
+import com.fullcycle.admin.catalogo.application.video.media.upload.DefaultUploadMediaUseCase;
+import com.fullcycle.admin.catalogo.application.video.media.upload.UploadMediaCommand;
 import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.domain.video.MediaResourceGateway;
