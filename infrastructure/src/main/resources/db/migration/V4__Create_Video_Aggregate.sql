@@ -41,9 +41,9 @@ CREATE TABLE videos (
 CREATE TABLE videos_categories (
     video_id CHAR(32) NOT NULL,
     category_id CHAR(32) NOT NULL,
-    CONSTRAINT idx_vcs_video_categories UNIQUE (video_id, category_id),
+    CONSTRAINT idx_vcs_video_category UNIQUE (video_id, category_id),
     CONSTRAINT fk_vcs_video_id FOREIGN KEY (video_id) REFERENCES videos (id),
-    CONSTRAINT fk_vcs_categories_id FOREIGN KEY (category_id) REFERENCES categories (id)
+    CONSTRAINT fk_vcs_category_id FOREIGN KEY (category_id) REFERENCES categories (id)
 );
 
 CREATE TABLE videos_genres (

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Year;
+import java.util.List;
 import java.util.Set;
 
 public class VideoTest extends UnitTest {
@@ -67,6 +68,7 @@ public class VideoTest extends UnitTest {
         Assertions.assertTrue(actualVideo.getBanner().isEmpty());
         Assertions.assertTrue(actualVideo.getThumbnail().isEmpty());
         Assertions.assertTrue(actualVideo.getThumbnailHalf().isEmpty());
+        Assertions.assertTrue(actualVideo.getDomainEvents().isEmpty());
 
         Assertions.assertDoesNotThrow(() -> actualVideo.validate(new ThrowsValidationHandler()));
     }

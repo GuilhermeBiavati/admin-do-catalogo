@@ -9,6 +9,7 @@ import com.fullcycle.admin.catalogo.domain.exceptions.InternalErrorException;
 import com.fullcycle.admin.catalogo.domain.exceptions.NotificationException;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
+import com.fullcycle.admin.catalogo.domain.utils.CollectionUtils;
 import com.fullcycle.admin.catalogo.domain.validation.Error;
 import com.fullcycle.admin.catalogo.domain.validation.ValidationHandler;
 import com.fullcycle.admin.catalogo.domain.validation.handler.Notification;
@@ -52,9 +53,10 @@ public class DefaultCreateVideoUseCase extends CreateVideoUseCase {
 
         final var aRating = Rating.of(aCommand.rating()).orElse(null);
         final var aLaunchYear = aCommand.launchedAt() != null ? Year.of(aCommand.launchedAt()) : null;
-        final Set<CategoryID> categories = toIdentifier(aCommand.categories(), CategoryID::from);
-        final Set<GenreID> genres = toIdentifier(aCommand.genres(), GenreID::from);
-        final Set<CastMemberID> members = toIdentifier(aCommand.members(), CastMemberID::from);
+
+        final Set<CategoryID> categories = CollectionUtils.mapTo(aCommand.categories(), CategoryID::from);
+        final Set<GenreID> genres = CollectionUtils.mapTo(aCommand.genres(), GenreID::from);
+        final Set<CastMemberID> members = CollectionUtils.mapTo(aCommand.members(), CastMemberID::from);
 
         final var notification = Notification.create();
 

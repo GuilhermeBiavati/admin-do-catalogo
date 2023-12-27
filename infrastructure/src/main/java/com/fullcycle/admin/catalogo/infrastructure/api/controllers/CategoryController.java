@@ -12,7 +12,7 @@ import com.fullcycle.admin.catalogo.application.category.update.UpdateCategoryUs
 import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcycle.admin.catalogo.domain.pagination.Pagination;
 import com.fullcycle.admin.catalogo.domain.validation.handler.Notification;
-import com.fullcycle.admin.catalogo.infrastructure.api.CategoryApi;
+import com.fullcycle.admin.catalogo.infrastructure.api.CategoryAPI;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryListResponse;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.CategoryResponse;
 import com.fullcycle.admin.catalogo.infrastructure.category.models.CreateCategoryRequest;
@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @RestController
-public class CategoryController implements CategoryApi {
+public class CategoryController implements CategoryAPI {
 
     private final CreateCategoryUseCase createCategoryUseCase;
     private final GetCategoryByIdUseCase getCategoryByIdUseCase;

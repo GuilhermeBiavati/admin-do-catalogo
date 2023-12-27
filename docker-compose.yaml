@@ -16,7 +16,36 @@ services:
     networks:
       - adm-videos-network
 
-networks:
-  adm-videos-network: 
+  rabbit:
+    container_name: adm_videos_rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=adm_videos
+      - RABBITMQ_DEFAULT_PASS=123456
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - adm-videos-network
 
+  keycloak:
+    container_name: adm_videos_keycloak
+    image: quay.io/keycloak/keycloak:20.0.3
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - 8443:8080
+    command:
+      - start-dev # Utilizar esse comando quando a aplicação estiver executando fora do Docker
+    #      - start-dev --hostname-url=http://keycloak:8080 # Utilizar esse comando quando a aplicação estiver dentro do Docker
+    volumes:
+      - .docker/keycloak:/opt/keycloak/data/h2:rw
+    networks:
+      - adm-videos-network
+
+networks:
+  adm-videos-network:
 

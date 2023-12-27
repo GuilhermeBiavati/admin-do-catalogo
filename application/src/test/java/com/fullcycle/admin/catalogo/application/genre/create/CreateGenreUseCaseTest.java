@@ -48,7 +48,12 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
         final var expectedIsActive = true;
         final var expectedCategories = List.<CategoryID>of();
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(expectedCategories), expectedIsActive);
+        final var aCommand =
+                CreateGenreCommand.with(
+                        expectedName,
+                        expectedIsActive,
+                        asString(expectedCategories)
+                );
 
         when(genreGateway.create(any())).thenAnswer(returnsFirstArg());
 
@@ -79,7 +84,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
                 CategoryID.from("97")
         );
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(expectedCategories), expectedIsActive);
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         when(categoryGateway.existsByIds(any())).thenReturn(expectedCategories);
 
@@ -113,7 +118,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
         final var expectedErrorMessage = "'name' should not be null";
         final var expectedErrorCount = 1;
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(expectedCategories), expectedIsActive);
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         final var actualException = Assertions.assertThrows(
                 NotificationException.class,
@@ -139,7 +144,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
         final var expectedErrorMessage = "'name' should not be empty";
         final var expectedErrorCount = 1;
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(expectedCategories), expectedIsActive);
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         final var actualException = Assertions.assertThrows(
                 NotificationException.class,
@@ -173,7 +178,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
 
         when(categoryGateway.existsByIds(any())).thenReturn(List.of(series));
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(expectedCategories), expectedIsActive);
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         final var actualException = Assertions.assertThrows(
                 NotificationException.class,
@@ -210,7 +215,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
 
         when(categoryGateway.existsByIds(any())).thenReturn(List.of(series));
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(expectedCategories), expectedIsActive);
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(expectedCategories));
 
         final var actualException = Assertions.assertThrows(
                 NotificationException.class,
@@ -235,7 +240,7 @@ public class CreateGenreUseCaseTest extends UseCaseTest {
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = false;
 
-        final var aCommand = CreateGenreCommand.with(expectedName, asString(List.<CategoryID>of()), expectedIsActive);
+        final var aCommand = CreateGenreCommand.with(expectedName, expectedIsActive, asString(List.<CategoryID>of()));
 
         when(genreGateway.create(any())).thenAnswer(returnsFirstArg());
 

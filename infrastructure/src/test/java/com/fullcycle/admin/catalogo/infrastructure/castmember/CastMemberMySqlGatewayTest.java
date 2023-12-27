@@ -1,14 +1,15 @@
 package com.fullcycle.admin.catalogo.infrastructure.castmember;
 
 import com.fullcycle.admin.catalogo.MySQLGatewayTest;
-import com.fullcycle.admin.catalogo.domain.Fixture;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMember;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberID;
 import com.fullcycle.admin.catalogo.domain.castmember.CastMemberType;
 import com.fullcycle.admin.catalogo.domain.pagination.SearchQuery;
 import com.fullcycle.admin.catalogo.infrastructure.castmember.persistence.CastMemberJpaEntity;
+import com.fullcycle.admin.catalogo.infrastructure.castmember.persistence.CastMemberMySQLGateway;
 import com.fullcycle.admin.catalogo.infrastructure.castmember.persistence.CastMemberRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -20,14 +21,18 @@ import static com.fullcycle.admin.catalogo.domain.Fixture.CastMembers.type;
 import static com.fullcycle.admin.catalogo.domain.Fixture.name;
 
 @MySQLGatewayTest
-class CastMemberMySqlGatewayTest {
+class CastMemberMySQLGatewayTest {
 
     @Autowired
-    private CastMemberMySqlGateway castMemberMySqlGateway;
+    private CastMemberMySQLGateway castMemberMySqlGateway;
 
     @Autowired
     private CastMemberRepository castMemberRepository;
 
+    @BeforeEach
+    void cleanUp() {
+        this.castMemberRepository.deleteAll();
+    }
 
     @Test
     public void testDependecies() {
@@ -68,7 +73,7 @@ class CastMemberMySqlGatewayTest {
     }
 
     @Test
-    public void ginvenAValidCastMember_whenCallsUpdate_shouldRefreshIt() {
+    public void ginvenAValidCastMember_whenCallsUpdate_shouldRefreshIt() throws InterruptedException {
 
         // given
 
@@ -85,6 +90,7 @@ class CastMemberMySqlGatewayTest {
         Assertions.assertEquals("Vin Diesel", aPreCreatedMember.getName());
         Assertions.assertEquals(CastMemberType.DIRECTOR, aPreCreatedMember.getType());
 
+        Thread.sleep(1);
 
         final var clone = CastMember.with(aMember);
 
@@ -262,7 +268,12 @@ class CastMemberMySqlGatewayTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"name,asc,0,10,5,5,Jason Momoa", "name,desc,0,10,5,5,Vin Diesel", "createdAt,asc,0,10,5,5,Kit Harington", "createdAt,desc,0,10,5,5,Martin Scorsese"})
+    @CsvSource({
+            "name,asc,0,10,5,5,Jason Momoa",
+            "name,desc,0,10,5,5,Vin Diesel",
+            "createdAt,asc,0,10,5,5,Kit Harington",
+            "createdAt,desc,0,10,5,5,Martin Scorsese"
+    })
     public void givenAValidSortAndDirection_whenCallsFindAll_shouldReturnSorted(final String expectedSort, final String expectedDirection, final int expectedPage, final int expectedPerPage, final int expectedItemsCount, final long expectedTotal, final String expectedName) {
 
 
@@ -339,7 +350,7 @@ class CastMemberMySqlGatewayTest {
         final var actualMember = castMemberMySqlGateway.existsByIds(List.of(CastMemberID.from("123"), expectedId));
 
         // then
-        Assertions.assertEquals(expectedItems, actualMember.size());
+         Assertions.assertEquals(expectedItems, actualMember.size());
         Assertions.assertEquals(expectedId.getValue(), actualMember.get(0).getValue());
     }
 
@@ -347,11 +358,21 @@ class CastMemberMySqlGatewayTest {
     private void mockMembers() {
 
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(CastMember.newMember("Kit Harington", CastMemberType.ACTOR)));
+        waitToCreate();
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(CastMember.newMember("Vin Diesel", CastMemberType.ACTOR)));
+        waitToCreate();
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(CastMember.newMember("Quentin Tarantino", CastMemberType.DIRECTOR)));
+        waitToCreate();
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(CastMember.newMember("Jason Momoa", CastMemberType.ACTOR)));
+        waitToCreate();
         castMemberRepository.saveAndFlush(CastMemberJpaEntity.from(CastMember.newMember("Martin Scorsese", CastMemberType.DIRECTOR)));
 
     }
 
+    private void waitToCreate() {
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException ignored) {
+        }
+    }
 }

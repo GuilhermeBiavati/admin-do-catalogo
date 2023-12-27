@@ -95,7 +95,7 @@ public class UpdateCategoryUseCaseTestIT {
     }
 
     @Test
-    public void givenAValidInactiveteCommand_whenCallsUpdateCategory_shouldReturnInactivatedCategoryId() {
+    public void givenAValidInactiveteCommand_whenCallsUpdateCategory_shouldReturnInactivatedCategoryId() throws InterruptedException {
         final var aCategory = Category.newCategory("Film", null, true);
 
         save(aCategory);
@@ -113,6 +113,8 @@ public class UpdateCategoryUseCaseTestIT {
 
         Assertions.assertTrue(aCategory.isActive());
         Assertions.assertNull(aCategory.getDeletedAt());
+
+        Thread.sleep(1);
 
         final var actualOutput = useCase.execute(aCommand).get();
 

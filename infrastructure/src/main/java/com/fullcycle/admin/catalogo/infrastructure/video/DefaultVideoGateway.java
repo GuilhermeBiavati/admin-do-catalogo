@@ -85,8 +85,8 @@ public class DefaultVideoGateway implements VideoGateway {
     }
 
     private Video save(final Video aVideo) {
-        final var result = this.videoRepository.save(VideoJpaEntity.from(aVideo))
-                .toAggregate();
+
+        final var result = this.videoRepository.save(VideoJpaEntity.from(aVideo)).toAggregate();
 
         aVideo.publishDomainEvents(this.eventService::send);
 

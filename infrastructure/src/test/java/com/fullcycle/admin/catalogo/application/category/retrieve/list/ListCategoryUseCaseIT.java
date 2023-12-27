@@ -24,19 +24,21 @@ public class ListCategoryUseCaseIT {
     private CategoryRepository categoryRepository;
 
     @BeforeEach
-    void mockUp() {
-        final var categories = Stream.of(
-                Category.newCategory("Filmes", null, true),
-                Category.newCategory("Amazon", "Originais da Amazon", true),
-                Category.newCategory("Netflix", null, true),
-                Category.newCategory("Documentarios", null, true),
-                Category.newCategory("Esportes", null, true),
-                Category.newCategory("Kids", "Crianças", true),
-                Category.newCategory("Z", "Last", true)
-        ).map(CategoryJpaEntity::from).toList();
+    void mockUp() throws InterruptedException {
 
-        categoryRepository.saveAllAndFlush(categories);
-
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Filmes", null, true)));
+        Thread.sleep(1);
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Amazon", "Originais da Amazon", true)));
+        Thread.sleep(1);
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Netflix", null, true)));
+        Thread.sleep(1);
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Documentarios", null, true)));
+        Thread.sleep(1);
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Esportes", null, true)));
+        Thread.sleep(1);
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Kids", "Crianças", true)));
+        Thread.sleep(1);
+        categoryRepository.saveAndFlush(CategoryJpaEntity.from(Category.newCategory("Z", "Last", true)));
 
     }
 
@@ -113,7 +115,6 @@ public class ListCategoryUseCaseIT {
     ) {
 
         final var expectedTerms = "";
-
 
         final var aQuery = new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
 

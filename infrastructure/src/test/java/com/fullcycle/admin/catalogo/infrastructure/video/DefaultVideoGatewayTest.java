@@ -12,6 +12,7 @@ import com.fullcycle.admin.catalogo.domain.genre.Genre;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreID;
 import com.fullcycle.admin.catalogo.domain.video.*;
+import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoJpaEntity;
 import com.fullcycle.admin.catalogo.infrastructure.video.persistence.VideoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -832,7 +833,7 @@ public class DefaultVideoGatewayTest {
     }
 
     private void mockVideos() {
-        videoGateway.create(Video.newVideo(
+        videoRepository.saveAndFlush(VideoJpaEntity.from(Video.newVideo(
                 "System Design no Mercado Livre na prática",
                 Fixture.Videos.description(),
                 Year.of(2022),
@@ -843,9 +844,9 @@ public class DefaultVideoGatewayTest {
                 Set.of(lives.getId()),
                 Set.of(tech.getId()),
                 Set.of(wesley.getId(), gabriel.getId())
-        ));
+        )));
 
-        videoGateway.create(Video.newVideo(
+        videoRepository.saveAndFlush(VideoJpaEntity.from(Video.newVideo(
                 "Não cometa esses erros ao trabalhar com Microsserviços",
                 Fixture.Videos.description(),
                 Year.of(Fixture.year()),
@@ -856,9 +857,9 @@ public class DefaultVideoGatewayTest {
                 Set.of(),
                 Set.of(),
                 Set.of()
-        ));
+        )));
 
-        videoGateway.create(Video.newVideo(
+        videoRepository.saveAndFlush(VideoJpaEntity.from(Video.newVideo(
                 "21.1 Implementação dos testes integrados do findAll",
                 Fixture.Videos.description(),
                 Year.of(Fixture.year()),
@@ -869,9 +870,9 @@ public class DefaultVideoGatewayTest {
                 Set.of(aulas.getId()),
                 Set.of(tech.getId()),
                 Set.of(gabriel.getId())
-        ));
+        )));
 
-        videoGateway.create(Video.newVideo(
+        videoRepository.saveAndFlush(VideoJpaEntity.from(Video.newVideo(
                 "Aula de empreendedorismo",
                 Fixture.Videos.description(),
                 Year.of(Fixture.year()),
@@ -882,6 +883,6 @@ public class DefaultVideoGatewayTest {
                 Set.of(aulas.getId()),
                 Set.of(business.getId()),
                 Set.of(wesley.getId())
-        ));
+        )));
     }
 }

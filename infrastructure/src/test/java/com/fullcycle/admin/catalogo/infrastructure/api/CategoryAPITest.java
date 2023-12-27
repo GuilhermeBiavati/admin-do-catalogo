@@ -1,6 +1,7 @@
 package com.fullcycle.admin.catalogo.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fullcycle.admin.catalogo.ApiTest;
 import com.fullcycle.admin.catalogo.ControllerTest;
 import com.fullcycle.admin.catalogo.application.category.create.CreateCategoryOutput;
 import com.fullcycle.admin.catalogo.application.category.create.CreateCategoryUseCase;
@@ -38,8 +39,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ControllerTest(controllers = CategoryApi.class)
-public class CategoryApiTest {
+@ControllerTest(controllers = CategoryAPI.class)
+public class CategoryAPITest {
 
     @Autowired
     private MockMvc mvc;
@@ -78,6 +79,7 @@ public class CategoryApiTest {
 
         // when
         final var request = post("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aInput));
 
@@ -113,6 +115,7 @@ public class CategoryApiTest {
 
         // when
         final var request = post("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aInput));
 
@@ -150,6 +153,7 @@ public class CategoryApiTest {
 
         // when
         final var request = post("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(aInput));
 
@@ -186,7 +190,7 @@ public class CategoryApiTest {
 
 //        when
 
-        final var request = get("/categories/{id}", expectedId);
+        final var request = get("/categories/{id}", expectedId).with(ApiTest.CATEGORIES_JWT);
 
         final var response = this.mvc.perform(request)
                 .andDo(print());
@@ -220,7 +224,7 @@ public class CategoryApiTest {
 
 
 //        when
-        final var request = get("/categories/{id}", expectedId.getValue());
+        final var request = get("/categories/{id}", expectedId.getValue()).with(ApiTest.CATEGORIES_JWT);
         final var response = this.mvc.perform(request)
                 .andDo(print());
 // then
@@ -242,6 +246,7 @@ public class CategoryApiTest {
         final var aUpdaterequest = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 //        when
         final var request = put("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aUpdaterequest));
@@ -279,6 +284,7 @@ public class CategoryApiTest {
         final var aUpdaterequest = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 //        when
         final var request = put("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aUpdaterequest));
@@ -316,6 +322,7 @@ public class CategoryApiTest {
         final var aUpdaterequest = new UpdateCategoryRequest(expectedName, expectedDescription, expectedIsActive);
 //        when
         final var request = put("/categories/{id}", expectedId)
+                .with(ApiTest.CATEGORIES_JWT)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(aUpdaterequest));
@@ -349,7 +356,7 @@ public class CategoryApiTest {
 
 //        when
 
-        final var request = delete("/categories/{id}", expectedId);
+        final var request = delete("/categories/{id}", expectedId).with(ApiTest.CATEGORIES_JWT);
 
         final var response = this.mvc.perform(request)
                 .andDo(print());
@@ -384,6 +391,7 @@ public class CategoryApiTest {
         when(listCategoriesUseCase.execute(any())).thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal, expectedItems));
 
         final var request = get("/categories")
+                .with(ApiTest.CATEGORIES_JWT)
                 .queryParam("page", String.valueOf(expectedPage))
                 .queryParam("perPage", String.valueOf(expectedPerPage))
                 .queryParam("sort", expectedSort)

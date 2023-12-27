@@ -1,6 +1,6 @@
 CREATE TABLE genres
 (
-    id         CHAR(36)  NOT NULL PRIMARY KEY,
+    id         CHAR(32)  NOT NULL PRIMARY KEY,
     name       varchar(255) NOT NULL,
     active     BOOLEAN      NOT NULL DEFAULT TRUE,
     created_at DATETIME(6) NOT NULL,
