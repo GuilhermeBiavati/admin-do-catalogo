@@ -22,7 +22,10 @@ jobs:
           distribution: 'adopt'
       # Configurar a JDK na máquina
       - name: Run application tests
-        run: ./gradlew test
+        run: |
+          chmod +x ./gradlew
+          ./gradlew test
+         
 
 
 
