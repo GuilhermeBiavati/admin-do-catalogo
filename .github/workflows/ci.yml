@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'feature/**'
-      - 'bugfixe/**'
+      - 'bugfix/**'
   #Interface manualmente
   workflow_dispatch:
 
