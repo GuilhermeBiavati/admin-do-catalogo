@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-@Profile("!development")
+//@Profile("!development")
 public class SecurityConfig {
 
     private static final String ROLE_ADMIN = "CATALOGO_ADMIN";
@@ -41,14 +41,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
-                        .antMatchers("/cast_members*").hasAnyRole(ROLE_ADMIN, ROLE_CAST_MEMBERS)
-                        .antMatchers("/categories*").hasAnyRole(ROLE_ADMIN, ROLE_CATEGORIES)
-                        .antMatchers("/genres*").hasAnyRole(ROLE_ADMIN, ROLE_GENRES)
-                        .antMatchers("/videos*").hasAnyRole(ROLE_ADMIN, ROLE_VIDEOS)
-                        .anyRequest().hasRole(ROLE_ADMIN))
+                                .antMatchers("/actuator/health", "/actuator/info").permitAll()
+                                .antMatchers("/cast_members*").hasAnyRole(ROLE_ADMIN, ROLE_CAST_MEMBERS)
+                                .antMatchers("/categories*").hasAnyRole(ROLE_ADMIN, ROLE_CATEGORIES)
+                                .antMatchers("/genres*").hasAnyRole(ROLE_ADMIN, ROLE_GENRES)
+                                .antMatchers("/videos*").hasAnyRole(ROLE_ADMIN, ROLE_VIDEOS)
+                                .anyRequest().hasRole(ROLE_ADMIN)
+                )
                 .oauth2ResourceServer(
                         oauth -> oauth.jwt()
-                        .jwtAuthenticationConverter(new KeycloakJwtConverter()))
+                                .jwtAuthenticationConverter(new KeycloakJwtConverter()))
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

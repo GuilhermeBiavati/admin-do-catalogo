@@ -28,6 +28,8 @@ import com.fullcycle.admin.catalogo.infrastructure.video.models.UpdateVideoReque
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoListResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.models.VideoResponse;
 import com.fullcycle.admin.catalogo.infrastructure.video.presenters.VideoApiPresenter;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -91,6 +93,8 @@ public class VideoController implements VideoAPI {
     }
 
     @Override
+    @Counted(value = "video.counted.create")
+    @Timed(value = "video.timed.create", longTask = true)
     public ResponseEntity<?> createFull(
             final String aTitle,
             final String aDescription,

@@ -21,6 +21,7 @@ import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.genre.GenreGateway;
 import com.fullcycle.admin.catalogo.domain.video.MediaResourceGateway;
 import com.fullcycle.admin.catalogo.domain.video.VideoGateway;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

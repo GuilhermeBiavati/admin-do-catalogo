@@ -11,7 +11,6 @@ amqp:
       routing-key: video.encoded
       queue: video.encoded.queue
 
-
 google:
   cloud:
     credentials: ${GOOGLE_CLOUD_CREDENTIALS}
@@ -40,6 +39,8 @@ server:
       io: 4 # One IO thread per CPU core is a reasonable default: https://undertow.io/undertow-docs/undertow-docs-2.1.0/index.html#listeners-2
 
 spring:
+  application:
+    name: Api catalogo de videos
   datasource:
     url: jdbc:mysql://${mysql.url}/${mysql.schema}?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8
     username: ${mysql.username}
@@ -83,3 +84,39 @@ storage:
   catalogo-videos:
     filename-pattern: type-{type}
     location-pattern: videoId-{videoId}
+
+management:
+  server:
+    port:
+      8081
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: "metrics,health,info,auditevents"
+  metrics:
+    enable:
+      executor: false
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+  endpoint:
+    health:
+      enabled: true
+      show-details: when-authorized
+      roles: CATALOGO_ADMIN
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+    auditevents:
+      enabled: true
+
+info:
+  application:
+    nome: ${spring.application.name}
+    descricao: Api de videos
+
+
